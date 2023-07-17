@@ -1,0 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+$Primarycolor: #09090b;
+$Secondarycolor: #27272a;
+
+body {
+  background-color: $Primarycolor;
+  color: $Secondarycolor;
+  height: 100vh;
+}

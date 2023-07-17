@@ -1,0 +1,36 @@
+@import "../../App.scss";
+
+.Sidebar {
+  border-right: 1px solid $Secondarycolor;
+  width: 64px;
+  height: 100vh;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+}
+.side-icon {
+  margin: 6px 0;
+}
+.s-item {
+  cursor: pointer;
+  padding: 8px;
+}
+.side-logo {
+  color: black;
+  background-color: white;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+.hr-break {
+  margin: 8px 0;
+  border-top: 1px solid $Secondarycolor;
+  width: 100%;
+}
