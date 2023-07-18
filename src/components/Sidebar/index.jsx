@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import { ReactComponent as Trendup } from "../../assets/icons/trendup.svg";
 import { ReactComponent as Dashboard } from "../../assets/icons/dashboard.svg";
@@ -48,9 +49,9 @@ function Sidebar() {
   return (
     <section className="Sidebar">
       <div className="Sidebar-primary side">
-        <a>
+        <Link to="/">
           <Trendup className="side-icon side-logo" />
-        </a>
+        </Link>
         <div className="hr-break"></div>
         {MENU_LIST?.map((item) => (
           <MenuItem

@@ -7,8 +7,11 @@ function Subscriptions() {
   return (
     <div className="nav-app">
       <Navbar label="Subscription" />
-      <div className="p-10">
-        <Card label="Total Subscription" icon={Play} stats="1000" />
+      <div className="summary">
+        <p className="px-5 py-3  font-semibold text-xl">Summary</p>
+        <div className="px-5 py-3">
+          <Card label="Total Subscription" icon={Play} stats="1000" />
+        </div>
       </div>
     </div>
   );

@@ -7,8 +7,11 @@ function Investments() {
   return (
     <div className="nav-app">
       <Navbar label="Investments" />
-      <div className="p-10">
-        <Card label="Total Investment" icon={Piggy} stats="1000" />
+      <div className="summary">
+        <p className="px-5 py-3  font-semibold text-xl">Summary</p>
+        <div className="px-5 py-3">
+          <Card label="Total Investment" icon={Piggy} stats="1000" />
+        </div>
       </div>
     </div>
   );
