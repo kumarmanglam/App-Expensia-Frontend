@@ -1,10 +1,12 @@
 import "./App.scss";
-import Sidebar from "./components/Sidebar";
+import RouterContainer from "./Routes";
+// import Layout from "./components/Layout";
 
 function App() {
   return (
     <div className="app">
-      <Sidebar />
+      <RouterContainer />
+      {/* <Layout /> */}
     </div>
   );
 }

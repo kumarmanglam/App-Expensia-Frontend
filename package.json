@@ -13,6 +13,8 @@
     "@svgr/webpack": "^8.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.14.1",
+    "react-tooltip": "^5.18.0",
     "vite-plugin-svgr": "^3.2.0"
   },
   "devDependencies": {

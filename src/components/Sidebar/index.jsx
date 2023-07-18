@@ -8,8 +8,43 @@ import { ReactComponent as Subs } from "../../assets/icons/subs.svg";
 import { ReactComponent as Help } from "../../assets/icons/help.svg";
 import { ReactComponent as Setting } from "../../assets/icons/setting.svg";
 import { ReactComponent as Logout } from "../../assets/icons/logout.svg";
+import { ReactComponent as Money } from "../../assets/icons/money.svg";
 
+import MenuItem from "./MenuItem";
 function Sidebar() {
+  const MENU_LIST = [
+    {
+      label: "Dashboard",
+      icon: Dashboard,
+      id: "1",
+      path: "/dashboard",
+    },
+    {
+      label: "Income",
+      icon: Income,
+      id: "2",
+      path: "/income",
+    },
+    {
+      label: "Expenses",
+      icon: Expense,
+      id: "3",
+      path: "/expenses",
+    },
+    {
+      label: "Subscription",
+      icon: Subs,
+      id: "4",
+      path: "/subscription",
+    },
+    {
+      label: "Investments",
+      icon: Money,
+      id: "5",
+      path: "/investments",
+    },
+  ];
+
   return (
     <section className="Sidebar">
       <div className="Sidebar-primary side">
@@ -17,18 +52,15 @@ function Sidebar() {
           <Trendup className="side-icon side-logo" />
         </a>
         <div className="hr-break"></div>
-        <a className="s-item">
-          <Dashboard className="side-icon" />
-        </a>
-        <a className="s-item">
-          <Income className="side-icon" />
-        </a>
-        <a className="s-item">
-          <Expense className="side-icon" />
-        </a>
-        <a className="s-item">
-          <Subs className="side-icon" />
-        </a>
+        {MENU_LIST?.map((item) => (
+          <MenuItem
+            key={item.id}
+            label={item.label}
+            icon={item.icon}
+            id={item.id}
+            path={item.path}
+          />
+        ))}
       </div>
       <div className="Sidebar-secondary side">
         <a className="s-item">

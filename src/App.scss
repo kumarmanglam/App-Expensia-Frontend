@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -6,9 +8,11 @@
 
 $Primarycolor: #09090b;
 $Secondarycolor: #27272a;
+$Fontcolor: #a1a1aa;
 
 body {
   background-color: $Primarycolor;
-  color: $Secondarycolor;
+  font-family: "Inter", sans-serif;
+  color: #ffffff;
   height: 100vh;
 }
