@@ -75,7 +75,7 @@
 }
 .blur-overlay {
   z-index: 20;
-  background-color: hsla(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.7);
   min-width: 100vw;
   min-height: 100vh;
   position: fixed;

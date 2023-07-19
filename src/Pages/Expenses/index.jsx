@@ -7,8 +7,11 @@ import AddBtn from "../../components/core/AddBtn";
 import { useState } from "react";
 import Modal from "../../components/Modal";
 
+import { useSelector } from "react-redux";
+
 function Expenses() {
   const [isOpen, setIsOpen] = useState(false);
+  const totalExpense = useSelector((state) => state.totalExpense);
   function closeModal() {
     setIsOpen(false);
   }
@@ -18,10 +21,9 @@ function Expenses() {
       <div className="summary">
         <p className="px-5 py-3  font-semibold text-xl">Summary</p>
         <div className="px-5 py-3">
-          <Card label="Total Spent" icon={Spent} stats="1000" />
+          <Card label="Total Spent" icon={Spent} stats={totalExpense} />
         </div>
       </div>
-      <AddBtn label="Add Expenses" />
       <button onClick={() => setIsOpen(true)}>
         <AddBtn />
       </button>

@@ -11,8 +11,17 @@ import AddBtn from "../../components/core/AddBtn";
 import Modal from "../../components/Modal";
 import { useState } from "react";
 
+import { useSelector, useDispatch } from "react-redux";
+import { actions } from "../../Store/index";
+
 function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
+  const totalIncome = useSelector((state) => state.totalIncome);
+  const totalExpense = useSelector((state) => state.totalExpense);
+  const totalBalance = useSelector((state) => state.totalBalance);
+  const totalInvesment = useSelector((state) => state.totalInvestment);
+  const totalSubscription = useSelector((state) => state.totalSubscription);
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -22,11 +31,15 @@ function Dashboard() {
       <div className="summary">
         <p className="px-5 py-3 font-semibold text-xl">Summary</p>
         <div className="dashboard-view px-5 py-3">
-          <Card label="Total Income" icon={Bag} stats="1000" />
-          <Card label="Available balance" icon={Wallet} stats="1000" />
-          <Card label="Total Spent" icon={Spent} stats="1000" />
-          <Card label="Total Investment" icon={Piggy} stats="1000" />
-          <Card label="Total Subscription" icon={Play} stats="1000" />
+          <Card label="Total Income" icon={Bag} stats={totalIncome} />
+          <Card label="Available balance" icon={Wallet} stats={totalBalance} />
+          <Card label="Total Spent" icon={Spent} stats={totalExpense} />
+          <Card label="Total Investment" icon={Piggy} stats={totalInvesment} />
+          <Card
+            label="Total Subscription"
+            icon={Play}
+            stats={totalSubscription}
+          />
         </div>
       </div>
       <button onClick={() => setIsOpen(true)}>

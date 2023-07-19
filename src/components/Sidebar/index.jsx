@@ -33,16 +33,16 @@ function Sidebar() {
       path: "/expenses",
     },
     {
-      label: "Subscription",
-      icon: Subs,
-      id: "4",
-      path: "/subscription",
-    },
-    {
       label: "Investments",
       icon: Money,
-      id: "5",
+      id: "4",
       path: "/investments",
+    },
+    {
+      label: "Subscription",
+      icon: Subs,
+      id: "5",
+      path: "/subscription",
     },
   ];
 

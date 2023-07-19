@@ -2,32 +2,49 @@ import React from "react";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import InputText from "../core/InputText";
+import { useEffect } from "react";
 
 function Modal({ closeModal }) {
-  const [isActive, setIsActive] = useState(1);
+  const [isActive, setIsActive] = useState(0);
   const location = useLocation();
   const path = location.pathname;
+  // console.log(path.slice(1));
   const MODAL_LIST = [
     {
-      id: 1,
+      id: 0,
       name: "Income",
     },
     {
+      id: 1,
+      name: "Expenses",
+    },
+    {
       id: 2,
-      name: "Expense",
+      name: "Investments",
     },
     {
       id: 3,
-      name: "Investment",
-    },
-    {
-      id: 4,
       name: "Subscription",
     },
   ];
+
+  let currid = MODAL_LIST.findIndex(
+    (item) => item.name.toLowerCase() === path.slice(1)
+  );
+  if (!currid) {
+    currid = 0;
+  }
+  console.log(currid);
+
+  useEffect(() => {
+    console.log(currid);
+    setIsActive(currid);
+    console.log(isActive);
+  }, [path]);
+
   let modalContent;
   switch (isActive) {
-    case 1:
+    case 0:
       modalContent = (
         <div className="Modal-form p-3">
           <InputText label="Name" placeholder="Salary" type="text" />
@@ -38,13 +55,49 @@ function Modal({ closeModal }) {
         </div>
       );
       break;
-    case 2:
+    case 1:
       modalContent = (
         <div className="Modal-form p-3">
-          <InputText label="Name" placeholder="Salary" type="text" />
+          <InputText label="Name" placeholder="Swiggy" type="text" />
           <div className="flex">
             <InputText label="Price" placeholder="1000" note="$" />
             <InputText label="Spent Date" type="Date" />
+          </div>
+        </div>
+      );
+      break;
+    case 2:
+      modalContent = (
+        <div className="Modal-form p-3">
+          <InputText
+            label="Name"
+            placeholder="Infy"
+            type="text"
+            note="Stocks/Bonds"
+          />
+          <div className="flex">
+            <InputText label="Amount invested" placeholder="1000" note="$" />
+            <InputText label="Date" type="Date" />
+          </div>
+        </div>
+      );
+      break;
+    case 3:
+      modalContent = (
+        <div className="Modal-form p-3">
+          <InputText
+            label="Name"
+            placeholder="EMI"
+            type="text"
+            note="Netflix/Broadband"
+          />
+          <div className="flex">
+            <InputText
+              label="Subscription amount"
+              placeholder="1000"
+              note="$"
+            />
+            <InputText label="Date" type="Date" />
           </div>
         </div>
       );
