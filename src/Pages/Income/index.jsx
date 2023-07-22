@@ -20,11 +20,15 @@ function Income() {
         <p className="px-5 py-3  font-semibold text-xl">Summary</p>
         <div className="px-5 py-3">
           <Card label="Total Income" icon={Bag} stats={totalIncome} />
+          {/* <Card label="Number of Incomes" state="4" /> */}
         </div>
       </div>
       <button onClick={() => setIsOpen(true)}>
         <AddBtn />
       </button>
+      {isOpen && (
+        <div className="blur-overlay" onClick={() => closeModal()}></div>
+      )}
       {isOpen && <Modal closeModal={() => closeModal()} />}
     </div>
   );

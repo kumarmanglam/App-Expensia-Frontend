@@ -32,9 +32,11 @@
 }
 .modal-tab-active {
   color: $Accentcolor;
+  font-weight: 600;
   border-bottom: 2px solid $Accentcolor;
 }
 .modal-inactive {
+  display: none;
   border-bottom: 2px solid $Grey;
 }
 .Modal-action {
@@ -56,6 +58,18 @@
   gap: 5px;
   margin: 10px 0;
   color: white;
+  width: 100%;
+}
+.selectInput {
+  padding: 5px;
+  gap: 5px;
+  margin: 10px 0;
+  width: 100%;
+}
+.select {
+  color: $Fontcolor;
+  background-color: $Primarycolor;
+  border: 1px solid $Grey-2;
 }
 .input {
   background-color: $Primarycolor;
@@ -81,4 +95,7 @@
   position: fixed;
   top: 0;
   left: 0;
+}
+.form-header {
+  grid-template-columns: 2fr 1fr;
 }
