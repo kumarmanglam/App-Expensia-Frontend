@@ -37,7 +37,6 @@
 }
 .modal-inactive {
   display: none;
-  border-bottom: 2px solid $Grey;
 }
 .Modal-action {
   // background-color: $Grey;
@@ -97,5 +96,5 @@
   left: 0;
 }
 .form-header {
-  grid-template-columns: 2fr 1fr;
+  display: flex;
 }

@@ -9,11 +9,11 @@ export const NavPrimaryList = [
   },
   {
     id: 3,
-    name: "Expenses",
+    name: "Expense",
   },
   {
     id: 4,
-    name: "Investments",
+    name: "Investment",
   },
   {
     id: 5,

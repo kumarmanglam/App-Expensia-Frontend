@@ -14,8 +14,8 @@ function RouterContainer() {
         <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/income" element={<Income />} />
-        <Route path="/expenses" element={<Expenses />} />
-        <Route path="/investments" element={<Investments />} />
+        <Route path="/expense" element={<Expenses />} />
+        <Route path="/investment" element={<Investments />} />
         <Route path="/subscription" element={<Subscription />} />
         {/* <Route path="/setting" element={<Setting />} /> */}
       </Route>

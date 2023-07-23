@@ -1,0 +1,14 @@
+@import "../../App.scss";
+
+.t-head {
+  background-color: $Lightgrey;
+}
+.tr {
+  border: 1px solid $Lightgrey;
+}
+.action > * {
+  cursor: pointer;
+}
+.action > * > * {
+  width: 18px;
+}

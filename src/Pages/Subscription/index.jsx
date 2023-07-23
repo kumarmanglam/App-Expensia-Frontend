@@ -6,10 +6,23 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import AddBtn from "../../components/core/AddBtn";
 import Modal from "../../components/Modal";
+import Table from "../../components/Table";
+import InputText from "../../components/core/InputText";
 
 function Subscriptions() {
   const [isOpen, setIsOpen] = useState(false);
   const totalSubs = useSelector((state) => state.totalSubscription);
+  const Subscription = useSelector((state) => state.subscription);
+  const [editData, setEditData] = useState(null);
+
+  const [filterValue, setFilterValue] = useState("");
+
+  const list = useSelector((state) => state.subscription);
+
+  const filteredList = list.filter((item) =>
+    item.name.toLowerCase().includes(filterValue.toLowerCase())
+  );
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -18,17 +31,44 @@ function Subscriptions() {
       <Navbar label="Subscription" />
       <div className="summary">
         <p className="px-5 py-3  font-semibold text-xl">Summary</p>
-        <div className="px-5 py-3">
-          <Card label="Total Subscription" icon={Play} stats={totalSubs} />
+        <div className="dashboard-view px-5 py-3">
+          <Card
+            label="Total Subscription"
+            icon={Play}
+            stats={totalSubs}
+            currency="$"
+          />
+          <Card label="Total Subscription" stats={Subscription.length} />
         </div>
       </div>
-      <button onClick={() => setIsOpen(true)}>
+      <div className="w-52 px-5">
+        <InputText
+          placeholder="Filter by name"
+          value={filterValue}
+          handleChange={(val) => {
+            setFilterValue(val);
+          }}
+        />
+      </div>
+      <Table
+        handleModal={(val) => {
+          setIsOpen(true);
+          setEditData(val);
+        }}
+        list={filterValue ? filteredList : list}
+      />
+      <button
+        onClick={() => {
+          setEditData(null);
+          setIsOpen(true);
+        }}
+      >
         <AddBtn />
       </button>
       {isOpen && (
         <div className="blur-overlay" onClick={() => closeModal()}></div>
       )}
-      {isOpen && <Modal closeModal={() => closeModal()} />}
+      {isOpen && <Modal closeModal={() => closeModal()} editdata={editData} />}
     </div>
   );
 }

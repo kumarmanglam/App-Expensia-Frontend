@@ -30,13 +30,13 @@ function Sidebar() {
       label: "Expenses",
       icon: Expense,
       id: "3",
-      path: "/expenses",
+      path: "/expense",
     },
     {
       label: "Investments",
       icon: Money,
       id: "4",
-      path: "/investments",
+      path: "/investment",
     },
     {
       label: "Subscription",

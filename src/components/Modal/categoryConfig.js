@@ -1,5 +1,31 @@
 // categoryConfig.js
+const currentDate = new Date();
+
+const year = currentDate.getFullYear();
+const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+const day = String(currentDate.getDate()).padStart(2, "0");
+
+const formattedDate = `${year}-${month}-${day}`;
+
 const categoryConfig = {
+  modalList: [
+    {
+      id: 0,
+      name: "income",
+    },
+    {
+      id: 1,
+      name: "expense",
+    },
+    {
+      id: 2,
+      name: "investment",
+    },
+    {
+      id: 3,
+      name: "subscription",
+    },
+  ],
   income: {
     defaultData: {
       name: "",
@@ -27,7 +53,7 @@ const categoryConfig = {
       { id: 2, name: "Transportation" },
       { id: 3, name: "Clothing" },
       { id: 4, name: "Health care" },
-      { id: 5, name: "Education and child care" },
+      { id: 5, name: "Education " },
       { id: 6, name: "Other" },
     ],
   },

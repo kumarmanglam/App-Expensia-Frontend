@@ -12,7 +12,6 @@ import Modal from "../../components/Modal";
 import { useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { actions } from "../../Store/index";
 
 function Dashboard() {
   const [isOpen, setIsOpen] = useState(false);
