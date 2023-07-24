@@ -34,7 +34,6 @@ function Modal({ closeModal, editdata }) {
     id: generateUniqueId(),
     ...activeCategoryData.defaultData,
   });
-
   useEffect(() => {
     if (editdata) {
       setData(editdata);
@@ -42,21 +41,17 @@ function Modal({ closeModal, editdata }) {
   }, [editdata]);
 
   function validateForm() {
-    // Check if any required fields are empty
-    if (
-      (activeModalData.name.required && !data.name.trim()) ||
-      (activeModalData.amount.required && !data.amount) ||
-      (activeModalData.date.required && !data.date)
-    ) {
+    if (parseInt(data.amount) > 0 && data.name.length > 0) {
+      console.log(parseInt(data.amount));
       return true;
     }
-
     return false;
   }
 
   function handleSubmit(e) {
     e.preventDefault();
     const isValid = validateForm();
+    console.log("submit form", data.name.length);
     if (isValid) {
       if (editdata) {
         if (isActive === 0) {
@@ -156,7 +151,12 @@ function Modal({ closeModal, editdata }) {
         </div>
         <div className="Modal-form p-3"></div>
         <div className="Modal-action flex justify-end p-2 gap-1">
-          <button className="py-2 px-5 Modal-add rounded-lg">Add</button>
+          <button
+            className="py-2 px-5 Modal-add rounded-lg"
+            onClick={(e) => handleSubmit(e)}
+          >
+            Add
+          </button>
           <button
             className="py-2 px-5 Modal-cancel  rounded-lg"
             onClick={() => closeModal()}
