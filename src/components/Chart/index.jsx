@@ -4,7 +4,7 @@ import Chart from "react-apexcharts";
 function Donut({ income, expense, subscription, investment }) {
   return (
     <div>
-      <div className="border-2 border-gray-800 donutChart mx-5 rounded-lg">
+      <div className="border-2 border-gray-800 donutChart mx-5 rounded-lg text-white">
         <Chart
           type="donut"
           options={{
@@ -16,7 +16,7 @@ function Donut({ income, expense, subscription, investment }) {
           }}
           series={[income, expense, subscription, investment]}
           labels={["Income", "Expense", "Subscription", "Investment"]}
-          width="450"
+          width="400"
         />
       </div>
     </div>

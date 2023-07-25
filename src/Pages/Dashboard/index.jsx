@@ -73,46 +73,11 @@ function Dashboard() {
   function closeModal() {
     setIsOpen(false);
   }
-  const signIn = async () => {
-    try {
-      const response = await API.auth.signIn({
-        email: "resume@jobdedo.com",
-        password: "nahibataraha",
-      });
-      console.log(response);
-      Cookies.set("idToken", response.data.idToken);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
-  const validate = async () => {
-    console.log(Cookies.get("idToken"));
-    try {
-      const response = await API.auth.validateToken({
-        requestUri: "http://localhost:5173/dashboard",
-        // postBody: { idToken: Cookies.get("idToken"), providerId: "password" },
-        postBody: `idToken={${Cookies.get("idToken")}}&providerId="password"`,
-        // requestUri: `[http://localhost:5173/dashboard]`,
-        // returnIdpCredential: true,
-        // returnSecureToken: true,
-        // postBody: `idToken=[${Cookies.get(
-        //   "idToken"
-        // )}]&providerId=[${"password"}]`,
-      });
-      console.log(response);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  // console.log(EmailAuthProviderID);
-  // "id_token={identityToken}&providerId=apple.com"
   return (
     <div className="nav-app">
       <Navbar label="Dashboard" />
       <div className="summary">
-        <button onClick={validate}>"validate api response console</button>
-        <button onClick={signIn}>sign in</button>
         <p className="px-5 py-3 font-semibold text-xl">Summary</p>
         <div className="dashboard-view px-5 py-3">
           <Card label="Total Income" icon={Bag} stats={totalIncome} />

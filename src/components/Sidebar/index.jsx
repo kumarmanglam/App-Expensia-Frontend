@@ -10,7 +10,7 @@ import { ReactComponent as Help } from "../../assets/icons/help.svg";
 import { ReactComponent as Setting } from "../../assets/icons/setting.svg";
 import { ReactComponent as Logout } from "../../assets/icons/logout.svg";
 import { ReactComponent as Money } from "../../assets/icons/money.svg";
-import Expensia from "../../assets/images/Expensia.png";
+import Expensia from "../../assets/images/expensia.png";
 
 import MenuItem from "./MenuItem";
 function Sidebar() {

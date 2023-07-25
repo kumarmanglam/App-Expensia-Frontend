@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Expensia from "../../assets/images/expensia.png";
 import { Link } from "react-router-dom";
+import { API } from "../../api";
+import Cookies from "js-cookie";
 
 function SignUp() {
   const [userData, setUserData] = useState({
@@ -8,7 +10,34 @@ function SignUp() {
     password: "",
     confirmpassword: "",
   });
-
+  const signUp = async () => {
+    try {
+      const response = await API.auth.signUp({
+        email: userData.email,
+        password: userData.password,
+      });
+      console.log(response);
+      Cookies.set("idToken", response.data.idToken);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  function handleSubmit() {
+    if (userData.email.length === 0) {
+      alert("Enter Email");
+    } else if (userData.password.length === 0) {
+      alert("Enter Password");
+    } else if (userData.password !== userData.confirmpassword) {
+      alert("Password not matching");
+    } else {
+      signUp();
+      setUserData({
+        email: "",
+        password: "",
+        confirmpassword: "",
+      });
+    }
+  }
   return (
     <div className="sign">
       <div className="signCard">
@@ -53,11 +82,11 @@ function SignUp() {
             Confirm Password
           </label>
           <input
-            value={userData.confirmpasswordpassword}
+            value={userData.confirmpassword}
             onChange={(e) =>
               setUserData({
                 ...userData,
-                confirmpasswordpassword: e.target.value,
+                confirmpassword: e.target.value,
               })
             }
             type="password"
@@ -67,17 +96,19 @@ function SignUp() {
             id="password"
           />
         </div>
-        <button className="signBtn">Sign Up</button>
+        <button className="signBtn" onClick={handleSubmit}>
+          Sign Up
+        </button>
       </div>
 
       <div className="noAccount">
         <Link to="/signin">
-          <a className="SignLink">Already have an account? Login now!</a>
+          <div className="SignLink">Already have an account? Login now!</div>
         </Link>
       </div>
       <div className="noAccount floatLink  cursor-pointer">
         <Link to="/signin">
-          <a className="SignLink text-white">Login</a>
+          <div className="SignLink text-white">Login</div>
         </Link>
       </div>
     </div>
