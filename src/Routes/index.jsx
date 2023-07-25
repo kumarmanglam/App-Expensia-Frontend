@@ -6,10 +6,16 @@ import Expenses from "../Pages/Expenses";
 import Income from "../Pages/Income";
 import Investments from "../Pages/Investments";
 import Subscription from "../Pages/Subscription";
+import SignUp from "../Pages/SignUp";
+import SignIn from "../Pages/SignIn";
+import ForgotPassword from "../Pages/ForgotPassword";
 
 function RouterContainer() {
   return (
     <Routes>
+      <Route path={"/signin"} element={<SignIn />} />
+      <Route path={"/signup"} element={<SignUp />} />
+      <Route path={"/forgotpassword"} element={<ForgotPassword />} />
       <Route path={"/"} element={<Layout />}>
         <Route path="/" element={<Navigate to="/dashboard" />} />
         <Route path="/dashboard" element={<Dashboard />} />

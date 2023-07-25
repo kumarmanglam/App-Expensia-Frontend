@@ -10,6 +10,7 @@ import { ReactComponent as Help } from "../../assets/icons/help.svg";
 import { ReactComponent as Setting } from "../../assets/icons/setting.svg";
 import { ReactComponent as Logout } from "../../assets/icons/logout.svg";
 import { ReactComponent as Money } from "../../assets/icons/money.svg";
+import Expensia from "../../assets/images/Expensia.png";
 
 import MenuItem from "./MenuItem";
 function Sidebar() {
@@ -50,7 +51,7 @@ function Sidebar() {
     <section className="Sidebar">
       <div className="Sidebar-primary side">
         <Link to="/">
-          <Trendup className="side-icon side-logo" />
+          <img src={Expensia} alt="Expensia" className="sideLogo" />
         </Link>
         <div className="hr-break"></div>
         {MENU_LIST?.map((item) => (
