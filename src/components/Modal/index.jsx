@@ -1,170 +1,196 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import InputText from "../core/InputText";
-import SelectInput from "../core/SelectInput";
-import { useDispatch } from "react-redux";
-import { actions } from "../../Store";
-import categoryConfig from "./categoryConfig";
-import modalContentConfig from "./modalContentConfig";
-import generateUniqueId from "../../common/functions";
+import {
+  selectModalData,
+  selectModalIsEditing,
+  selectModalType,
+} from "../../Store/selectors/modal";
+import {
+  closeIsModalOpen,
+  resetModalData,
+  setModalType,
+} from "../../Store/reducers/modal";
 
-function Modal({ closeModal, editdata }) {
+import { ReactComponent as Close } from "../../assets/icons/close.svg";
+import { CATEGORY_CONFIG_MODAL } from "./categoryConfig";
+import { getCurrentDate } from "../../common/functions";
+import {
+  createTransactionThunk,
+  updateTransactionThunk,
+} from "../../Store/reducers/transaction";
+function Modal() {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const { pathname } = location;
-
-  const currid = categoryConfig.modalList.findIndex(
-    (item) => item.name === pathname.slice(1)
-  );
-
-  const [isActive, setIsActive] = useState(currid >= 0 ? currid : 0);
-  const [activeTabName, setActiveTabName] = useState(
-    categoryConfig.modalList[isActive].name
-  );
-
-  const activeCategoryData = categoryConfig[activeTabName];
-  const activeModalData = modalContentConfig[activeTabName];
-
-  // modalContentConfig[categoryConfig.modalList[isActive].name.toLowerCase()];
-  // console.log(activeModalData);
-  // console.log(activeCategoryData);
-
-  const [data, setData] = useState({
-    id: generateUniqueId(),
-    ...activeCategoryData.defaultData,
-  });
+  const { pathname } = useLocation();
+  const type = useSelector(selectModalType);
+  const isEditing = useSelector(selectModalIsEditing);
   useEffect(() => {
-    if (editdata) {
-      setData(editdata);
-    }
-  }, [editdata]);
+    dispatch(
+      setModalType(
+        pathname.substring(1) === "dashboard" ? "income" : pathname.substring(1)
+      )
+    );
+  }, []);
 
-  function validateForm() {
-    if (parseInt(data.amount) > 0 && data.name.length > 0) {
-      console.log(parseInt(data.amount));
-      return true;
+  const [formData, setFormData] = useState({
+    amount: 0,
+    date: getCurrentDate(),
+    description: "",
+    type: type,
+    category: CATEGORY_CONFIG_MODAL[type]?.defaultData?.category,
+  });
+  const editData = useSelector(selectModalData);
+
+  useEffect(() => {
+    if (isEditing) {
+      setFormData({
+        id: editData.id,
+        amount: editData.amount,
+        date: editData.date,
+        description: editData.description,
+        type: editData.type,
+        category: editData.category,
+        __destroyInfo: {
+          id: editData.id,
+          type: editData.type,
+        },
+      });
     }
-    return false;
-  }
+  }, []);
+
+  // useEffect(() => {
+  //   console.log("type is changed to -- " + type);
+  // }, [type]);
+
+  // on unmount reset data
+  useEffect(() => {
+    return () => {
+      dispatch(resetModalData(type));
+    };
+  }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
-    const isValid = validateForm();
-    console.log("submit form", data.name.length);
-    if (isValid) {
-      if (editdata) {
-        if (isActive === 0) {
-          dispatch(actions.updateIncome(data));
-        } else if (isActive === 1) {
-          dispatch(actions.updateExpense(data));
-        } else if (isActive === 2) {
-          dispatch(actions.updateInvestment(data));
-        } else if (isActive === 3) {
-          dispatch(actions.updateSubscription(data));
-        }
-      } else {
-        if (isActive === 0) {
-          dispatch(actions.addIncome(data));
-        } else if (isActive === 1) {
-          dispatch(actions.addExpense(data));
-        } else if (isActive === 2) {
-          dispatch(actions.addInvestment(data));
-        } else if (isActive === 3) {
-          dispatch(actions.addSubscription(data));
-        }
-      }
+    if (formData.amount <= 0) {
+      alert("Amount should be greater than 0");
+    } else if (formData.description.trim() == "") {
+      alert("Description cannot be empty");
+    } else if (isEditing) {
+      dispatch(updateTransactionThunk(formData));
+      dispatch(closeIsModalOpen());
+    } else {
+      dispatch(
+        createTransactionThunk({ ...formData, onSuccess: (transaction) => {} })
+      );
+      dispatch(closeIsModalOpen());
     }
-    setData({
-      id: generateUniqueId(),
-      ...activeCategoryData.defaultData,
-    });
-    closeModal();
   }
 
   return (
-    <div className="Modal">
-      <div className="Modal-header">
-        <div className="modal-tabs flex">
-          {pathname.slice(1) === "dashboard"
-            ? categoryConfig.modalList?.map((item) => (
-                <div
-                  key={item.id}
-                  className={`modal-tab p-3 ${
-                    isActive === item.id ? "modal-tab-active" : ""
-                  }`}
-                  onClick={() => {
-                    setIsActive(item.id);
-                    setActiveTabName(item.name);
-                  }}
-                >
-                  <p>{item.name}</p>
-                </div>
-              ))
-            : categoryConfig.modalList?.map((item) => (
-                <div
-                  key={item.id}
-                  className={`modal-tab p-3 ${
-                    isActive === item.id ? "modal-tab-active" : "modal-inactive"
-                  }`}
-                >
-                  <p>{item.name}</p>
-                </div>
-              ))}
+    <div>
+      <div
+        className="blur-overlay"
+        onClick={() => dispatch(closeIsModalOpen())}
+      ></div>
+      <div className="Modal p-4  text-white">
+        <div>
+          <p className="text-center py-2 text-lg font-semibold">
+            New Transaction
+          </p>
+        </div>
+        <button
+          className="btn-close-left"
+          onClick={() => {
+            dispatch(closeIsModalOpen());
+          }}
+        >
+          <Close />
+        </button>
+        <div className="main-form p-4">
+          <form onSubmit={(e) => handleSubmit(e)}>
+            <div className="mb-4  items-center relative">
+              <input
+                autoFocus="autofocus"
+                type="number"
+                className="amount-input p-2 max-w-full text-center"
+                value={formData.amount}
+                onChange={(e) =>
+                  setFormData({ ...formData, amount: e.target.value })
+                }
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="date"
+                className="w-full p-2 bg-suface-color text-white  rounded"
+                value={formData.date}
+                onChange={(e) =>
+                  setFormData({ ...formData, date: e.target.value })
+                }
+              />
+            </div>
+            <div className="mb-4">
+              <select
+                className="w-full p-2 bg-suface-color text-white  rounded"
+                placeholder="type"
+                value={formData.type}
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
+                    type: e.target.value,
+                  });
+                  dispatch(setModalType(e.target.value));
+                  // try to use only one setFormData
+                  // setType(e.target.value);
+                  //change category default vale again
+                }}
+                name="type"
+              >
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+                <option value="investment">Investment</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Description"
+                className="w-full p-2 bg-suface-color text-white rounded"
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+              />
+            </div>
+            <div className="mb-4">
+              <select
+                className="w-full p-2 bg-suface-color text-white  rounded"
+                value={formData.category}
+                onChange={(e) =>
+                  setFormData({ ...formData, category: e.target.value })
+                }
+                name="category"
+              >
+                {CATEGORY_CONFIG_MODAL[type]?.categoryList.map((item) => {
+                  return (
+                    <option value={item.name} name="category" key={item.name}>
+                      {item.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <div className="text-center">
+              <button
+                type="submit"
+                className=" py-3 px-8 rounded-3xl text-xs border text-white"
+              >
+                Add Transaction
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-      <form onSubmit={(e) => handleSubmit(e)}>
-        <div className="Modal-form p-3">
-          <div className="form-header">
-            <InputText
-              label={activeModalData.name.label}
-              placeholder="Salary"
-              type={activeModalData.name.type}
-              value={data.name}
-              handleChange={(val) => setData({ ...data, name: val })}
-            />
-            <SelectInput
-              list={categoryConfig[activeTabName].categoryList}
-              label="Category"
-              value={data.category}
-              handleChange={(val) => setData({ ...data, category: val })}
-            />
-          </div>
-          <div className="grid grid-cols-2 justify-items-center items-center">
-            <InputText
-              label={activeModalData.amount.label}
-              type="Number"
-              placeholder="1000"
-              note="$"
-              classes="form-input"
-              value={data.amount}
-              handleChange={(val) => setData({ ...data, amount: val })}
-            />
-            <InputText
-              label={activeModalData.date.label}
-              type="Date"
-              classes="form-input"
-              value={data.date}
-              handleChange={(val) => setData({ ...data, date: val })}
-            />
-          </div>
-        </div>
-        <div className="Modal-form p-3"></div>
-        <div className="Modal-action flex justify-end p-2 gap-1">
-          <button
-            className="py-2 px-5 Modal-add rounded-lg"
-            onClick={(e) => handleSubmit(e)}
-          >
-            Add
-          </button>
-          <button
-            className="py-2 px-5 Modal-cancel  rounded-lg"
-            onClick={() => closeModal()}
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
     </div>
   );
 }

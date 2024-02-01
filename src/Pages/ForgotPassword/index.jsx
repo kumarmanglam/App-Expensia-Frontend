@@ -1,15 +1,26 @@
 import React, { useState } from "react";
 import Expensia from "../../assets/images/expensia.png";
 import { Link } from "react-router-dom";
+import { sendResetLink } from "../../api/authService";
 
 function ForgotPassword() {
   const [userData, setUserData] = useState({
     email: "",
   });
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    sendResetLink(userData.email).then(() => {
+      alert("Reset link sent to " + userData.email);
+    });
+    setUserData({
+      email: "",
+    });
+  }
+
   return (
     <div className="sign">
-      <div className="signCard">
+      <form className="signCard" onSubmit={(e) => handleSubmit(e)}>
         <div>
           <img src={Expensia} alt="ene" className="Expensia" />
         </div>
@@ -32,7 +43,7 @@ function ForgotPassword() {
           />
         </div>
         <button className="signBtn">Send Link</button>
-      </div>
+      </form>
       <div className="noAccount">
         <Link to="/signup">
           <a className="SignLink">Don't have an account? Signup now!</a>

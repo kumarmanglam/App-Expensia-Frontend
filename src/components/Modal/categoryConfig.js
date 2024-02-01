@@ -1,43 +1,25 @@
 // categoryConfig.js
 const currentDate = new Date();
-
 const year = currentDate.getFullYear();
 const month = String(currentDate.getMonth() + 1).padStart(2, "0");
 const day = String(currentDate.getDate()).padStart(2, "0");
-
 const formattedDate = `${year}-${month}-${day}`;
 
-const categoryConfig = {
-  modalList: [
-    {
-      id: 0,
-      name: "income",
-    },
-    {
-      id: 1,
-      name: "expense",
-    },
-    {
-      id: 2,
-      name: "investment",
-    },
-    {
-      id: 3,
-      name: "subscription",
-    },
-  ],
+export const CATEGORY_CONFIG_MODAL = {
   income: {
     defaultData: {
       name: "",
       amount: 0,
       date: formattedDate,
       category: "Salary",
+      type: "income",
     },
     categoryList: [
       { id: 0, name: "Salary" },
-      { id: 1, name: "Dividends" },
-      { id: 2, name: "Investments" },
-      { id: 3, name: "Passive Income" },
+      { id: 1, name: "Investments" },
+      { id: 2, name: "Dividends" },
+      { id: 2, name: "Rental" },
+      { id: 3, name: "Other" },
     ],
   },
   expense: {
@@ -45,16 +27,17 @@ const categoryConfig = {
       name: "",
       amount: 0,
       date: formattedDate,
-      category: "Food",
+      category: "Housing",
+      type: "income",
     },
     categoryList: [
-      { id: 0, name: "Food" },
-      { id: 1, name: "Housing" },
-      { id: 2, name: "Transportation" },
-      { id: 3, name: "Clothing" },
-      { id: 4, name: "Health care" },
-      { id: 5, name: "Education " },
-      { id: 6, name: "Other" },
+      { id: 0, name: "Housing" },
+      { id: 1, name: "Transportation" },
+      { id: 2, name: "Food" },
+      { id: 3, name: "Healthcare" },
+      { id: 4, name: "Clothing" },
+      { id: 5, name: "Utility" },
+      { id: 6, name: "Other " },
     ],
   },
   investment: {
@@ -63,6 +46,7 @@ const categoryConfig = {
       amount: 0,
       date: formattedDate,
       category: "Stocks",
+      type: "income",
     },
     categoryList: [
       { id: 0, name: "Stocks" },
@@ -70,22 +54,21 @@ const categoryConfig = {
       { id: 2, name: "Bonds" },
       { id: 3, name: "Gold" },
       { id: 4, name: "Real estate" },
-      { id: 5, name: "ETF" },
-    ],
-  },
-  subscription: {
-    defaultData: {
-      name: "",
-      amount: 0,
-      date: formattedDate,
-      category: "Monthly",
-    },
-    categoryList: [
-      { id: 0, name: "Monthly" },
-      { id: 1, name: "Quarterly" },
-      { id: 2, name: "Yearly" },
+      { id: 5, name: "Other" },
     ],
   },
 };
 
-export default categoryConfig;
+// subscription: {
+//   defaultData: {
+//     name: "",
+//     amount: 0,
+//     date: formattedDate,
+//     category: "Monthly",
+//   },
+//   categoryList: [
+//     { id: 0, name: "Monthly" },
+//     { id: 1, name: "Quarterly" },
+//     { id: 2, name: "Yearly" },
+//   ],
+// },

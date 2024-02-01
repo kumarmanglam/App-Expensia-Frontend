@@ -1,7 +1,7 @@
 @import "../../App.scss";
 
 .Modal {
-  position: absolute;
+  position: fixed;
   right: 0;
   left: 0;
   top: 0;
@@ -11,8 +11,8 @@
   height: min-content;
   width: 480px;
   border-radius: 10px;
-  border: 1px solid $Grey-2;
-  background-color: $Primarycolor;
+  // border: 1px solid $Grey-2;
+  background-color: $Background;
   z-index: 40;
 }
 .Modal-header {
@@ -28,12 +28,13 @@
   margin-bottom: -2px;
 }
 .modal-tab {
+  text-transform: capitalize;
   cursor: pointer;
 }
 .modal-tab-active {
-  color: $Accentcolor;
+  color: $Secondarycolor;
   font-weight: 600;
-  border-bottom: 2px solid $Accentcolor;
+  border-bottom: 2px solid $Secondarycolor;
 }
 .modal-inactive {
   display: none;
@@ -45,7 +46,7 @@
   border-bottom-left-radius: 10px;
 }
 .Modal-add {
-  background-color: $Accentcolor;
+  background-color: $Secondarycolor;
 }
 .Modal-cancel {
   border: 1px solid $Secondarycolor;
@@ -67,11 +68,11 @@
 }
 .select {
   color: $Fontcolor;
-  background-color: $Primarycolor;
+  background-color: $Background;
   border: 1px solid $Grey-2;
 }
 .input {
-  background-color: $Primarycolor;
+  background-color: $Background;
   padding: 4px 5px;
   border: 1px solid $Grey-2;
   border-radius: 5px;

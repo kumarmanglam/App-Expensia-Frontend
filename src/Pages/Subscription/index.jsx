@@ -2,7 +2,6 @@ import React from "react";
 import Navbar from "../../components/core/Navbar";
 import { ReactComponent as Play } from "../../assets/icons/play.svg";
 import Card from "../../components/core/Card";
-import { useSelector } from "react-redux";
 import { useState } from "react";
 import AddBtn from "../../components/core/AddBtn";
 import Modal from "../../components/Modal";
@@ -10,22 +9,22 @@ import Table from "../../components/Table";
 import InputText from "../../components/core/InputText";
 
 function Subscriptions() {
-  const [isOpen, setIsOpen] = useState(false);
-  const totalSubs = useSelector((state) => state.totalSubscription);
-  const Subscription = useSelector((state) => state.subscription);
+  // const [isOpen, setIsOpen] = useState(false);
+  const totalSubs = 0;
+  const Subscription = 0;
   const [editData, setEditData] = useState(null);
 
   const [filterValue, setFilterValue] = useState("");
 
-  const list = useSelector((state) => state.subscription);
+  const list = [];
 
   const filteredList = list.filter((item) =>
     item.name.toLowerCase().includes(filterValue.toLowerCase())
   );
 
-  function closeModal() {
-    setIsOpen(false);
-  }
+  // function closeModal() {
+  //   setIsOpen(false);
+  // }
   return (
     <div className="nav-app">
       <Navbar label="Subscription" />
@@ -65,10 +64,10 @@ function Subscriptions() {
       >
         <AddBtn />
       </button>
-      {isOpen && (
+      {/* {isOpen && (
         <div className="blur-overlay" onClick={() => closeModal()}></div>
       )}
-      {isOpen && <Modal closeModal={() => closeModal()} editdata={editData} />}
+      {isOpen && <Modal closeModal={() => closeModal()} editdata={editData} />} */}
     </div>
   );
 }
