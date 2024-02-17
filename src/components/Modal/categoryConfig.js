@@ -11,52 +11,58 @@ export const CATEGORY_CONFIG_MODAL = {
       name: "",
       amount: 0,
       date: formattedDate,
-      category: "Salary",
+      category: CATEGORIES.INCOME[0].name,
       type: "income",
     },
-    categoryList: [
-      { id: 0, name: "Salary" },
-      { id: 1, name: "Investments" },
-      { id: 2, name: "Dividends" },
-      { id: 2, name: "Rental" },
-      { id: 3, name: "Other" },
-    ],
+    categoryList: CATEGORIES.INCOME,
   },
   expense: {
     defaultData: {
       name: "",
       amount: 0,
       date: formattedDate,
-      category: "Housing",
+      category: CATEGORIES.EXPENSE[0].name,
       type: "income",
     },
-    categoryList: [
-      { id: 0, name: "Housing" },
-      { id: 1, name: "Transportation" },
-      { id: 2, name: "Food" },
-      { id: 3, name: "Healthcare" },
-      { id: 4, name: "Clothing" },
-      { id: 5, name: "Utility" },
-      { id: 6, name: "Other " },
-    ],
+    categoryList: CATEGORIES.EXPENSE,
   },
   investment: {
     defaultData: {
       name: "",
       amount: 0,
       date: formattedDate,
-      category: "Stocks",
+      category: CATEGORIES.INVESTMENT[0].name,
       type: "income",
     },
-    categoryList: [
-      { id: 0, name: "Stocks" },
-      { id: 1, name: "Mutual Funds" },
-      { id: 2, name: "Bonds" },
-      { id: 3, name: "Gold" },
-      { id: 4, name: "Real estate" },
-      { id: 5, name: "Other" },
-    ],
+    categoryList: CATEGORIES.INVESTMENT,
   },
+};
+
+const CATEGORIES = {
+  INCOME: [
+    { id: 0, name: "Salary" },
+    { id: 1, name: "Investments" },
+    { id: 2, name: "Dividends" },
+    { id: 2, name: "Rental" },
+    { id: 3, name: "Other" },
+  ],
+  EXPENSE: [
+    { id: 0, name: "Housing" },
+    { id: 1, name: "Transportation" },
+    { id: 2, name: "Food" },
+    { id: 3, name: "Healthcare" },
+    { id: 4, name: "Clothing" },
+    { id: 5, name: "Utility" },
+    { id: 6, name: "Other " },
+  ],
+  INVESTMENT: [
+    { id: 0, name: "Stocks" },
+    { id: 1, name: "Mutual Funds" },
+    { id: 2, name: "Bonds" },
+    { id: 3, name: "Gold" },
+    { id: 4, name: "Real estate" },
+    { id: 5, name: "Other" },
+  ],
 };
 
 // subscription: {
