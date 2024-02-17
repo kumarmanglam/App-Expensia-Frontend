@@ -1,73 +1,167 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllIncomesPaginatedAndSortedThunk,
+  getPaginatedIncomeThunk,
+  resetIncomes,
+} from "../../Store/reducers/income";
+import {
+  selectIncomeList,
+  selectIncomeTotalNoOfElements,
+} from "../../Store/selectors/income";
+import { selectSummary } from "../../Store/selectors/transaction";
 import Navbar from "../../components/core/Navbar";
+
 import { ReactComponent as Bag } from "../../assets/icons/bag.svg";
-import Card from "../../components/core/Card";
-import AddBtn from "../../components/core/AddBtn";
-import { useState } from "react";
-import Modal from "../../components/Modal";
-import { useSelector } from "react-redux";
+import { TABLE_HEADER_CONFIG_INCOME } from "../../components/Table/headerConfig";
+
+import {
+  selectSortingOrder,
+  selectorderByField,
+} from "../../Store/selectors/orderBy";
+import useInfiniteScroll from "../../common/useInfiniteScroll";
 import Table from "../../components/Table";
-import InputText from "../../components/core/InputText";
+import AddBtn from "../../components/core/AddBtn";
+import Card from "../../components/core/Card";
+import { getAllTransactionsThunk } from "../../Store/reducers/transaction";
+export const SORT_ORDER_BY_CONFIG = {
+  0: "",
+  1: "asc",
+  2: "desc",
+};
 
 function Income() {
-  const [isOpen, setIsOpen] = useState(false);
-  const totalIncome = useSelector((state) => state.totalIncome);
-  const Income = useSelector((state) => state.income);
-  const [editData, setEditData] = useState(null);
-  const [filterValue, setFilterValue] = useState("");
+  const dispatch = useDispatch();
+  const summary = useSelector(selectSummary);
+  const incomeList = useSelector(selectIncomeList);
+  const [pageNum, setPageNum] = useState(0);
+  const sortField = useSelector(selectorderByField);
+  const orderBy = useSelector(selectSortingOrder);
+  const [searchQuery, setSearchQuery] = useState("");
+  //0 means default
+  //1 means up
+  //2 means down
+  const totalNoOfRecords = useSelector(selectIncomeTotalNoOfElements);
 
-  const list = useSelector((state) => state.income);
+  const handleRef = useInfiniteScroll(() => {
+    // console.log("infinte scroll ran");
+    setPageNum((prev) => prev + 1);
+  });
 
-  const filteredList = list.filter((item) =>
-    item.name.toLowerCase().includes(filterValue.toLowerCase())
+  useEffect(() => {
+    setPageNum(0);
+  }, [orderBy, sortField]);
+
+  useEffect(() => {
+    loadMoreData();
+  }, [pageNum, sortField, orderBy]);
+
+  // useEffect(() => {
+  //   dispatch(getAllTransactionsThunk());
+  // }, []);
+
+  const loadMoreData = () => {
+    if (pageNum * 20 <= totalNoOfRecords) {
+      if (sortField == "default" || orderBy === 0) {
+        dispatch(getPaginatedIncomeThunk({ offset: pageNum, pageSize: 20 }));
+      } else {
+        dispatch(
+          getAllIncomesPaginatedAndSortedThunk({
+            offset: pageNum,
+            pageSize: 20,
+            sortByField: sortField,
+            orderBy: SORT_ORDER_BY_CONFIG[orderBy],
+          })
+        );
+      }
+    }
+  };
+  const filteredData = incomeList.filter((expense) =>
+    expense.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  function closeModal() {
-    setIsOpen(false);
-  }
   return (
     <div className="nav-app">
       <Navbar label="Income" />
-      <div className="summary">
-        <p className="px-5 py-3  font-semibold text-xl">Summary</p>
-        <div className="dashboard-view px-5 py-3">
-          <Card
-            label="Total Income"
-            icon={Bag}
-            stats={totalIncome}
-            currency="$"
+      <div className="app-wrapper ">
+        {/* <TestTable /> */}
+        <div className="summary">
+          <p className="  font-semibold text-xl">Summary</p>
+          <div className="dashboard-view my-3">
+            <Card label="Total Income" icon={Bag} stats={summary.totalIncome} />
+          </div>
+          {/* <div className="flex gap-8">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => {
+                setSortField("amount");
+                setOrderBy(true);
+              }}
+            >
+              Sort By AMOUNT in Ascending order
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => {
+                setSortField("amount");
+                setOrderBy(false);
+              }}
+            >
+              Sort By AMOUNT in descending order
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => {
+                setSortField("description");
+                setOrderBy(true);
+              }}
+            >
+              Sort By DESCRIPTION in Ascending order
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => {
+                setSortField("description");
+                setOrderBy(false);
+              }}
+            >
+              Sort By DESCRIPTION in descending order
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => {
+                setSortField("date");
+                setOrderBy(true);
+              }}
+            >
+              Sort By DATE in Ascending order
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => {
+                setSortField("date");
+                setOrderBy(false);
+              }}
+            >
+              Sort By DATE in descending order
+            </button>
+          </div> */}
+          <div className="pt-7  w-min">
+            <input
+              className="search-bar"
+              type="text"
+              placeholder="Filter by name"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <Table
+            headers={TABLE_HEADER_CONFIG_INCOME}
+            list={filteredData}
+            handleRef={handleRef}
           />
-          <Card label="Number of Incomes" stats={Income.length} />
         </div>
-      </div>
-      <div className="w-52 px-5">
-        <InputText
-          placeholder="Filter by name"
-          value={filterValue}
-          handleChange={(val) => {
-            setFilterValue(val);
-          }}
-        />
-      </div>
-      <Table
-        handleModal={(val) => {
-          setIsOpen(true);
-          setEditData(val);
-        }}
-        list={filterValue ? filteredList : list}
-      />
-      <button
-        onClick={() => {
-          setEditData(null);
-          setIsOpen(true);
-        }}
-      >
         <AddBtn />
-      </button>
-      {isOpen && (
-        <div className="blur-overlay" onClick={() => closeModal()}></div>
-      )}
-      {isOpen && <Modal closeModal={() => closeModal()} editdata={editData} />}
+      </div>
     </div>
   );
 }

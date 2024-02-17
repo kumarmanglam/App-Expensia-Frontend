@@ -6,18 +6,27 @@
   box-sizing: border-box;
 }
 
-$Primarycolor: #09090b;
-$Secondarycolor: #27272a;
+// $Primarycolor: #121212;
+// $Secondarycolor: #27272a;
 $Lightgrey: #1f1f1f;
 $Grey: #1c1c1c;
 $Grey-2: #868e96;
 $Fontcolor: #a1a1aa;
 $Accentcolor: #2563eb;
 
+$Background: #121212;
+$Surface: #1e1e1e;
+$Primarycolor: #bb86fc;
+$PrimarycolorLight: #f1e7fe1a;
+$Secondarycolor: #03dac6;
+$OnBackground: #d9d9d9;
+$OnSurface: #e3e3e3;
+$OnPrimary: #000000;
+$OnSecondary: #000000;
 body {
-  background-color: $Primarycolor;
+  background-color: $Background !important;
   font-family: "Inter", sans-serif;
   color: #ffffff;
   height: 100vh;
 }
-$Primarycolor: #09090b;
+// $Primarycolor: #09090b;

@@ -1,17 +1,33 @@
 @import "../../App.scss";
 
-.t-head {
-  background-color: $Lightgrey;
+.table_component {
+  border: 2px solid $Surface;
+  color: $OnSurface;
+  border-radius: 10px;
 }
-.tr {
-  border: 1px solid $Lightgrey;
+.table_header {
+  position: sticky;
+  top: 58px;
+  overflow-y: scroll;
 }
-.action > * {
-  cursor: pointer;
+.table_header {
+  background-color: $Surface;
 }
-.action > * > * {
-  width: 18px;
+.table-title-header {
+  color: $OnBackground;
 }
+// .t-head {
+//   background-color: $Lightgrey;
+// }
+// .tr {
+//   border: 1px solid $Lightgrey;
+// }
+// .action > * {
+//   cursor: pointer;
+// }
+// .action > * > * {
+//   width: 18px;
+// }s
 // /** @type {import('tailwindcss').Config} */
 // export default {
 //   content: [

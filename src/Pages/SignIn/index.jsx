@@ -1,79 +1,61 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { loginAPICall } from "../../api/authService";
 import Expensia from "../../assets/images/expensia.png";
-import { Link } from "react-router-dom";
-import { API } from "../../api";
 
 function SignIn() {
-  // console.log(EmailAuthProviderID);
-  // "id_token={identityToken}&providerId=apple.com"
   const [userData, setUserData] = useState({
-    email: "",
+    usernameOrEmail: "",
     password: "",
   });
-  const signIn = async () => {
-    try {
-      const response = await API.auth.signIn({
-        email: userData.email,
-        password: userData.password,
-      });
-      console.log(response);
-      Cookies.set("idToken", response.data.idToken);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  const validate = async () => {
-    try {
-      const response = await API.auth.validateToken({
-        requestUri: "http://localhost",
-        postBody: `id_token=[{${Cookies.get(
-          "idToken"
-        )}}]&providerId=["password"]`,
-      });
-      console.log("validating success");
-      alert("validate errrr");
-      console.log(response);
-    } catch (e) {
-      console.log("validating error");
-      alert("validate ssssss");
-      console.log(e);
-    }
-  };
-  function handleSubmit() {
-    if (userData.email.length === 0) {
-      alert("Enter Email");
+  const navigator = useNavigate();
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (userData.usernameOrEmail.length === 0) {
+      alert("Enter correct Username Or Email");
     } else if (userData.password.length === 0) {
-      alert("Enter Email");
+      alert("Enter Password");
     } else {
-      signIn();
-      validate();
+      //to be handled later
+      //trim the userdata extra space after the username or email
       setUserData({
-        email: "",
+        ...userData,
+        usernameOrEmail: userData.usernameOrEmail.trim(),
+      });
+      try {
+        await loginAPICall(userData);
+        navigator("/dashboard");
+      } catch (error) {
+        alert("Enter Valid Credentials");
+      }
+      setUserData({
+        usernameOrEmail: "",
         password: "",
       });
     }
   }
   return (
     <div className="sign">
-      <div className="signCard">
+      <form className="signCard" onSubmit={(e) => handleSubmit(e)}>
         <div>
           <img src={Expensia} alt="ene" className="Expensia" />
         </div>
         <h1 className="signtitle">Login to Expensia</h1>
         <div className="inputWrap">
           <label className="labelSign" htmlFor="email">
-            Email
+            Username or Email
           </label>
           <input
-            value={userData.email}
+            value={userData.usernameOrEmail}
             onChange={(e) =>
-              setUserData({ ...userData, email: e.target.value })
+              setUserData({ ...userData, usernameOrEmail: e.target.value })
             }
-            type="email"
-            placeholder="Enter email"
+            type="text"
+            placeholder="Enter Username or Email"
             required
             className="inputSign"
-            id="email"
+            id="usernameOrEmail"
           />
         </div>
         <div className="inputWrap">
@@ -92,13 +74,11 @@ function SignIn() {
             id="password"
           />
         </div>
-        <button className="signBtn" onClick={handleSubmit}>
-          Login
-        </button>
+        <button className="signBtn">Login</button>
         <Link to="/forgotpassword">
           <div className="SignLink">Forgot password?</div>
         </Link>
-      </div>
+      </form>
       <div className="noAccount">
         <Link to="/signup">
           <div className="SignLink">Don't have an account? Signup now!</div>

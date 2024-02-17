@@ -1,64 +1,43 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { TABLE_COMPONENT_CONFIG } from "./headerConfig";
+import SmartTableHeader from "../Common/SmartTableHeader";
 
-import { ReactComponent as Edit } from "../../assets/icons/edit.svg";
-import { ReactComponent as Trash } from "../../assets/icons/trash.svg";
-import { actions } from "../../Store";
-
-function Table({ handleModal, list }) {
-  const location = useLocation();
-  const { pathname } = location;
-  const path = pathname.slice(1);
-
-  const dispatch = useDispatch();
-
+function Table({ list, headers, handleRef }) {
   return (
-    <div className="px-5 py-3">
-      <table className="table w-full table-fixed rounded-md">
-        <thead className="cursor-pointer t-head">
-          <tr className="tr border-1">
-            <th className="p-2 text-left">Name</th>
-            <th className="p-2 text-left">Amount</th>
-            <th className="p-2 text-left">Date</th>
-            <th className="p-2 text-left">Category</th>
-            <th className="p-2 text-left">Actions</th>
-          </tr>
-        </thead>
-        {list?.length > 0 ? (
-          <tbody>
-            {list?.map((item) => (
-              <tr key={item.id} className="tr">
-                <td className="p-2 text-left">{item.name}</td>
-                <td className="p-2 text-left">${parseInt(item.amount)}</td>
-                <td className="p-2 text-left">{item.date}</td>
-                <td className="p-2 text-left">{item.category}</td>
-                <td className="p-2 text-left flex gap-3 action">
-                  <button onClick={() => handleModal(item)}>
-                    <Edit />
-                  </button>
-                  <button
-                    onClick={() =>
-                      dispatch(actions.deleteData({ type: path, data: item }))
-                    }
-                  >
-                    <Trash />
-                  </button>
+    <table className="w-full table_component mt-5">
+      <thead className="table_header !h-10">
+        <tr>
+          {headers?.map((header) => (
+            <th
+              style={{ maxWidth: 200 }}
+              className={` px-3 text-sm font-medium ${header?.classes}`}
+              key={header.key}
+            >
+              {/* {header.label} */}
+              <SmartTableHeader label={header.label} labelKey={header.key} />
+              {/* {smart header} */}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody className="divide-y-2 divide-[#1e1e1e]">
+        {list?.map((item, index) => (
+          <tr key={index} ref={index === list.length - 1 ? handleRef : null}>
+            {/* {index}
+              {"length is "}
+              {index === list.length - 1 ? "last" : "not last"} */}
+            {headers?.map((header, index) => {
+              const Component = TABLE_COMPONENT_CONFIG?.[header?.key];
+              return (
+                <td key={index} className={` px-3 py-5 ${header?.classes}`}>
+                  {Component ? <Component data={item} /> : null}
                 </td>
-              </tr>
-            ))}
-          </tbody>
-        ) : (
-          <tbody className="tr">
-            <tr>
-              <td className="p-4 text-center " colSpan="5">
-                No data
-              </td>
-            </tr>
-          </tbody>
-        )}
-      </table>
-    </div>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 

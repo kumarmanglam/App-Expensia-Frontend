@@ -1,109 +1,122 @@
-import React, { useEffect } from "react";
-import Navbar from "../../components/core/Navbar";
-import Card from "../../components/core/Card";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { ReactComponent as Piggy } from "../../assets/icons/piggy.svg";
+import Card from "../../components/core/Card";
+import Navbar from "../../components/core/Navbar";
+
 import { ReactComponent as Bag } from "../../assets/icons/bag.svg";
+import { ReactComponent as Piggy } from "../../assets/icons/piggy.svg";
 import { ReactComponent as Spent } from "../../assets/icons/spent.svg";
 import { ReactComponent as Wallet } from "../../assets/icons/wallet.svg";
-import { ReactComponent as Play } from "../../assets/icons/play.svg";
-import AddBtn from "../../components/core/AddBtn";
-import Modal from "../../components/Modal";
-import { useState } from "react";
 
-import { useSelector, useDispatch } from "react-redux";
+import {
+  selectSummary,
+  top20TransactionsSelector,
+} from "../../Store/selectors/transaction";
+import Table from "../../components/Table";
+
+import { setIsModalOpen } from "../../Store/reducers/modal";
+import {
+  selectSortingOrder,
+  selectorderByField,
+} from "../../Store/selectors/orderBy";
 import Donut from "../../components/Chart";
-import { actions } from "../../Store";
-import { API } from "../../api";
-import Cookies from "js-cookie";
+import { TABLE_HEADER_CONFIG } from "../../components/Table/headerConfig";
+import AddBtn from "../../components/core/AddBtn";
+import ProfileImage from "../Profile/ProfileImage";
 
 function Dashboard() {
-  const [isOpen, setIsOpen] = useState(false);
-  const totalIncome = useSelector((state) => state.totalIncome);
-  const totalExpense = useSelector((state) => state.totalExpense);
-  const totalBalance = useSelector((state) => state.totalBalance);
-  const totalInvesment = useSelector((state) => state.totalInvestment);
-  const totalSubscription = useSelector((state) => state.totalSubscription);
   const dispatch = useDispatch();
-  useEffect(() => {
-    // TODO: remove this whole thing
-    dispatch(
-      actions.addIncome({
-        id: "1690220311913-889",
-        name: "SDE",
-        amount: "320",
-        category: "salary",
-      })
-    );
-    dispatch(
-      actions.addExpense({
-        id: "1690220311913-825Psa",
-        name: "SDE1",
-        amount: "30",
-        category: "salary",
-      })
-    );
-    dispatch(
-      actions.addExpense({
-        id: "1690220311913-820",
-        name: "SDE1",
-        amount: "30",
-        category: "salary",
-      })
-    );
+  const orderBy = useSelector(selectSortingOrder);
+  const orderField = useSelector(selectorderByField);
 
-    dispatch(
-      actions.addInvestment({
-        id: "1690220311913-840",
-        name: "SDE2",
-        amount: "400",
-        category: "salary",
-      })
-    );
+  const top10Transactions = useSelector(top20TransactionsSelector);
 
-    dispatch(
-      actions.addSubscription({
-        id: "1690220311913-850",
-        name: "SDE4",
-        amount: "330",
-        category: "salary",
-      })
-    );
-  }, []);
-  function closeModal() {
-    setIsOpen(false);
+  // useEffect(() => {
+  //   dispatch(getAllTransactionsThunk());
+  // }, []);
+
+  function sortByField(list, field, order) {
+    // Use slice() to create a new array and avoid mutating the original array
+    const sortedList = list.slice().sort((a, b) => {
+      // Use bracket notation to access the dynamic field
+      const valueA = a[field];
+      const valueB = b[field];
+      // Compare the values based on the specified order (ascending or descending)
+      if (order === 1) {
+        return valueA > valueB ? 1 : valueA < valueB ? -1 : 0;
+      } else if (order === 2) {
+        return valueB > valueA ? 1 : valueB < valueA ? -1 : 0;
+      }
+      console.log("default condition ran");
+      return 0;
+    });
+    return sortedList;
   }
+  // Create a state variable to hold the sorted list
+  const [sortedList, setSortedList] = useState(top10Transactions);
 
+  // Update the sortedList when orderField or orderBy changes
+  useEffect(() => {
+    const sortedList = sortByField(top10Transactions, orderField, orderBy);
+    setSortedList(sortedList);
+  }, [orderField, orderBy, top10Transactions]);
+
+  useEffect(() => {
+    const sortedList = sortByField(top10Transactions, orderField, orderBy);
+    setSortedList(sortedList);
+  }, []);
+
+  const summary = useSelector(selectSummary);
+  // const colWidth = ["60px", "120px", "60px", "60px", "60px"];
   return (
     <div className="nav-app">
       <Navbar label="Dashboard" />
-      <div className="summary">
-        <p className="px-5 py-3 font-semibold text-xl">Summary</p>
-        <div className="dashboard-view px-5 py-3">
-          <Card label="Total Income" icon={Bag} stats={totalIncome} />
-          <Card label="Available balance" icon={Wallet} stats={totalBalance} />
-          <Card label="Total Spent" icon={Spent} stats={totalExpense} />
-          <Card label="Total Investment" icon={Piggy} stats={totalInvesment} />
-          <Card
-            label="Total Subscription"
-            icon={Play}
-            stats={totalSubscription}
-          />
+      {/* <TestTransaction /> */}
+      {/* <TestTable /> */}
+      <div className="app-wrapper">
+        <div className="summary">
+          <p className="font-semibold text-xl">Summary</p>
+          <div className="dashboard-view my-4">
+            <Card label="Total Income" icon={Bag} stats={summary.totalIncome} />
+
+            <Card
+              label="Available balance"
+              icon={Wallet}
+              stats={summary.balance}
+            />
+            <Card
+              label="Total Spent"
+              icon={Spent}
+              stats={summary.totalExpense}
+            />
+            <Card
+              label="Total Investment"
+              icon={Piggy}
+              stats={summary.totalInvestment}
+            />
+            <Card
+              label="Total Investment"
+              icon={Piggy}
+              stats={summary.totalInvestment}
+            />
+            {/* <Card label="Total Subscription" icon={Play} stats={0} /> */}
+          </div>
         </div>
+        <Donut
+          income={summary.totalIncome}
+          expense={summary.totalExpense}
+          investment={summary.totalInvestment}
+          subscription={0 ?? 0}
+        />
+        <div onClick={() => dispatch(setIsModalOpen())}>
+          <AddBtn />
+        </div>
+        <p className="my-4 px-10 text-xl font-bold table-title-header">
+          Top 20 transactions
+        </p>
+        <Table list={sortedList} headers={TABLE_HEADER_CONFIG} />
       </div>
-      <Donut
-        income={totalIncome ?? 0}
-        expense={totalExpense ?? 0}
-        investment={totalInvesment ?? 0}
-        subscription={totalSubscription ?? 0}
-      />
-      <button onClick={() => setIsOpen(true)}>
-        <AddBtn />
-      </button>
-      {isOpen && (
-        <div className="blur-overlay" onClick={() => closeModal()}></div>
-      )}
-      {isOpen && <Modal closeModal={() => closeModal()} />}
     </div>
   );
 }
