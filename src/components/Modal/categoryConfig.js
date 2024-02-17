@@ -5,6 +5,33 @@ const month = String(currentDate.getMonth() + 1).padStart(2, "0");
 const day = String(currentDate.getDate()).padStart(2, "0");
 const formattedDate = `${year}-${month}-${day}`;
 
+const CATEGORIES = {
+  INCOME: [
+    { id: 0, name: "Salary" },
+    { id: 1, name: "Investments" },
+    { id: 2, name: "Dividends" },
+    { id: 2, name: "Rental" },
+    { id: 3, name: "Other" },
+  ],
+  EXPENSE: [
+    { id: 0, name: "Housing" },
+    { id: 1, name: "Transportation" },
+    { id: 2, name: "Food" },
+    { id: 3, name: "Healthcare" },
+    { id: 4, name: "Clothing" },
+    { id: 5, name: "Utility" },
+    { id: 6, name: "Other " },
+  ],
+  INVESTMENT: [
+    { id: 0, name: "Stocks" },
+    { id: 1, name: "Mutual Funds" },
+    { id: 2, name: "Bonds" },
+    { id: 3, name: "Gold" },
+    { id: 4, name: "Real estate" },
+    { id: 5, name: "Other" },
+  ],
+};
+
 export const CATEGORY_CONFIG_MODAL = {
   income: {
     defaultData: {
@@ -36,33 +63,6 @@ export const CATEGORY_CONFIG_MODAL = {
     },
     categoryList: CATEGORIES.INVESTMENT,
   },
-};
-
-const CATEGORIES = {
-  INCOME: [
-    { id: 0, name: "Salary" },
-    { id: 1, name: "Investments" },
-    { id: 2, name: "Dividends" },
-    { id: 2, name: "Rental" },
-    { id: 3, name: "Other" },
-  ],
-  EXPENSE: [
-    { id: 0, name: "Housing" },
-    { id: 1, name: "Transportation" },
-    { id: 2, name: "Food" },
-    { id: 3, name: "Healthcare" },
-    { id: 4, name: "Clothing" },
-    { id: 5, name: "Utility" },
-    { id: 6, name: "Other " },
-  ],
-  INVESTMENT: [
-    { id: 0, name: "Stocks" },
-    { id: 1, name: "Mutual Funds" },
-    { id: 2, name: "Bonds" },
-    { id: 3, name: "Gold" },
-    { id: 4, name: "Real estate" },
-    { id: 5, name: "Other" },
-  ],
 };
 
 // subscription: {

@@ -24,13 +24,6 @@ function Modal() {
   const { pathname } = useLocation();
   const type = useSelector(selectModalType);
   const isEditing = useSelector(selectModalIsEditing);
-  useEffect(() => {
-    dispatch(
-      setModalType(
-        pathname.substring(1) === "dashboard" ? "income" : pathname.substring(1)
-      )
-    );
-  }, []);
 
   const [formData, setFormData] = useState({
     amount: 0,
@@ -39,10 +32,25 @@ function Modal() {
     type: type,
     category: CATEGORY_CONFIG_MODAL[type]?.defaultData?.category,
   });
+  console.log(formData);
   const editData = useSelector(selectModalData);
+
+  // useEffect(() => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     category: CATEGORY_CONFIG_MODAL[type]?.defaultData?.category,
+  //   }));
+  //   console.log(
+  //     "main nahi chal raha",
+  //     type,
+  //     CATEGORY_CONFIG_MODAL[type]?.defaultData?.category
+  //   );
+  // }, [type, editData]);
 
   useEffect(() => {
     if (isEditing) {
+      console.log("mai reset kr sakta hu is Editing");
+
       setFormData({
         id: editData.id,
         amount: editData.amount,
@@ -55,6 +63,18 @@ function Modal() {
           type: editData.type,
         },
       });
+    } else {
+      const calculatedType =
+        pathname.substring(1) === "dashboard"
+          ? "income"
+          : pathname.substring(1);
+      setFormData({
+        amount: 0,
+        date: getCurrentDate(),
+        description: "",
+        type: calculatedType,
+        category: CATEGORY_CONFIG_MODAL[calculatedType].defaultData.category,
+      });
     }
   }, []);
 
@@ -63,11 +83,11 @@ function Modal() {
   // }, [type]);
 
   // on unmount reset data
-  useEffect(() => {
-    return () => {
-      dispatch(resetModalData(type));
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(resetModalData(type));
+  //   };
+  // }, []);
 
   function handleSubmit(e) {
     e.preventDefault();
