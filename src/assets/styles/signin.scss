@@ -2,12 +2,14 @@
 
 .sign {
   padding-top: 5rem;
+  height: 100vh;
 }
 .signCard {
   width: 500px;
   height: min-content;
   margin: auto;
-  border: 0.5px solid rgb(58, 52, 52);
+  background-color: $Surface;
+  // border: 0.5px solid rgb(58, 52, 52);
   padding: 40px 60px;
   border-radius: 10px;
   display: grid;

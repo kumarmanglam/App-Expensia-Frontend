@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { ReactComponent as Dashboard } from "../../assets/icons/dashboard.svg";
@@ -13,7 +13,8 @@ import { logout } from "../../api/authService";
 import MenuItem from "./MenuItem";
 import { useDispatch } from "react-redux";
 import { getAllTransactionsThunk } from "../../Store/reducers/transaction";
-import { fetchUser } from "../../Store/reducers/user";
+import user, { fetchUser } from "../../Store/reducers/user";
+import LoadingBar from "react-top-loading-bar";
 export const MENU_LIST = [
   {
     label: "Dashboard",
@@ -47,48 +48,59 @@ export const MENU_LIST = [
   // },
 ];
 function Sidebar() {
+  const [progress, setProgress] = useState();
   const dispatch = useDispatch();
+  const ref = useRef(null);
 
   function handleLogout() {
     logout();
   }
 
   useEffect(() => {
-    dispatch(getAllTransactionsThunk());
-    dispatch(fetchUser());
+    ref.current.continuousStart();
+    fetchData();
   }, []);
+
+  async function fetchData() {
+    await dispatch(getAllTransactionsThunk());
+    await dispatch(fetchUser());
+    ref.current.complete();
+  }
 
   // call user and save it in redux or session storage
 
   return (
-    <section className="Sidebar">
-      <div className="Sidebar-primary side">
-        <Link to="/dashboard">
-          <img src={Expensia} alt="Expensia" className="sideLogo" />
-        </Link>
-        <div className="hr-break"></div>
-        {MENU_LIST?.map((item) => (
-          <MenuItem
-            key={item.id}
-            label={item.label}
-            icon={item.icon}
-            id={item.id}
-            path={item.path}
-          />
-        ))}
-      </div>
-      <div className="Sidebar-primary side ">
-        {/* <a className="s-item">
+    <div>
+      <LoadingBar ref={ref} color="#bb86fc" transitionTime={100} />
+      <section className="Sidebar">
+        <div className="Sidebar-primary side">
+          <Link to="/dashboard">
+            <img src={Expensia} alt="Expensia" className="sideLogo" />
+          </Link>
+          <div className="hr-break"></div>
+          {MENU_LIST?.map((item) => (
+            <MenuItem
+              key={item.id}
+              label={item.label}
+              icon={item.icon}
+              id={item.id}
+              path={item.path}
+            />
+          ))}
+        </div>
+        <div className="Sidebar-primary side ">
+          {/* <a className="s-item">
           <Help />
         </a> */}
-        {/* <div>
+          {/* <div>
           <MenuItem key={12} label="Setting" icon={Setting} id={12} path="" />
         </div> */}
-        <div onClick={handleLogout}>
-          <MenuItem key={22} label="Logout" icon={Logout} id={22} path="" />
+          <div onClick={handleLogout}>
+            <MenuItem key={22} label="Logout" icon={Logout} id={22} path="" />
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
 

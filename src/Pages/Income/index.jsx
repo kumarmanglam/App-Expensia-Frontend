@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllIncomesPaginatedAndSortedThunk,
@@ -24,6 +24,7 @@ import Table from "../../components/Table";
 import AddBtn from "../../components/core/AddBtn";
 import Card from "../../components/core/Card";
 import { getAllTransactionsThunk } from "../../Store/reducers/transaction";
+import LoadingBar from "react-top-loading-bar";
 export const SORT_ORDER_BY_CONFIG = {
   0: "",
   1: "asc",
@@ -31,6 +32,7 @@ export const SORT_ORDER_BY_CONFIG = {
 };
 
 function Income() {
+  const ref = useRef(null);
   const dispatch = useDispatch();
   const summary = useSelector(selectSummary);
   const incomeList = useSelector(selectIncomeList);
@@ -47,6 +49,10 @@ function Income() {
     // console.log("infinte scroll ran");
     setPageNum((prev) => prev + 1);
   });
+
+  useEffect(() => {
+    ref.current.continuousStart();
+  }, []);
 
   useEffect(() => {
     setPageNum(0);
@@ -75,12 +81,14 @@ function Income() {
         );
       }
     }
+    ref.current.complete();
   };
   const filteredData = incomeList.filter((expense) =>
     expense.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
   return (
     <div className="nav-app">
+      <LoadingBar ref={ref} color="#bb86fc" transitionTime={1000} />
       <Navbar label="Income" />
       <div className="app-wrapper ">
         {/* <TestTable /> */}

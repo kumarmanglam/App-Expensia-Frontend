@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllInvestmentPaginatedAndSortedThunk,
@@ -21,8 +21,10 @@ import Card from "../../components/core/Card";
 import Navbar from "../../components/core/Navbar";
 import { SORT_ORDER_BY_CONFIG } from "../Income";
 import { getAllTransactionsThunk } from "../../Store/reducers/transaction";
+import LoadingBar from "react-top-loading-bar";
 
 function Investments() {
+  const ref = useRef(null);
   const dispatch = useDispatch();
   const summary = useSelector(selectSummary);
   const investmentlist = useSelector(selectInvestmentList);
@@ -36,6 +38,9 @@ function Investments() {
     console.log("infinite scroll ran");
     setPageNum((prev) => prev + 1);
   });
+  useEffect(() => {
+    ref.current.continuousStart();
+  }, []);
 
   useEffect(() => {
     setPageNum(0);
@@ -67,12 +72,14 @@ function Investments() {
         );
       }
     }
+    ref.current.complete();
   };
   const filteredData = investmentlist.filter((expense) =>
     expense.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
   return (
     <div className="nav-app">
+      <LoadingBar ref={ref} color="#bb86fc" transitionTime={1000} />
       <Navbar label="Investments" />
       <div className="app-wrapper">
         <div className="summary">

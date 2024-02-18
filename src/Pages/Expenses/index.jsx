@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Card from "../../components/core/Card";
 import Navbar from "../../components/core/Navbar";
 
@@ -24,8 +24,10 @@ import Table from "../../components/Table";
 import { TABLE_HEADER_CONFIG_INCOME } from "../../components/Table/headerConfig";
 import { SORT_ORDER_BY_CONFIG } from "../Income";
 import { getAllTransactionsThunk } from "../../Store/reducers/transaction";
+import LoadingBar from "react-top-loading-bar";
 
 function Expenses() {
+  const ref = useRef();
   const dispatch = useDispatch();
   const summary = useSelector(selectSummary);
   const expenselist = useSelector(selectExpenseList);
@@ -38,6 +40,12 @@ function Expenses() {
   const handleRef = useInfiniteScroll(() => {
     setPageNum((prev) => prev + 1);
   });
+
+  useEffect(() => {
+    if (expenselist.length === 0) {
+      ref.current.continuousStart();
+    }
+  }, []);
 
   useEffect(() => {
     setPageNum(0);
@@ -67,12 +75,19 @@ function Expenses() {
         );
       }
     }
+    ref.current.complete();
   };
   const filteredData = expenselist.filter((expense) =>
     expense.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
   return (
     <div className="nav-app">
+      <LoadingBar
+        ref={ref}
+        loaderSpeed={700}
+        color="#bb86fc"
+        transitionTime={1000}
+      />
       <Navbar label="Expenses" />
       <div className="app-wrapper">
         {/* <TestTable /> */}

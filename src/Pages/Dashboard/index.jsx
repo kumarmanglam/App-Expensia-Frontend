@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Card from "../../components/core/Card";
@@ -24,8 +24,10 @@ import Donut from "../../components/Chart";
 import { TABLE_HEADER_CONFIG } from "../../components/Table/headerConfig";
 import AddBtn from "../../components/core/AddBtn";
 import ProfileImage from "../Profile/ProfileImage";
+import TestTable from "./testTable";
 
 function Dashboard() {
+  const ref = useRef(null);
   const dispatch = useDispatch();
   const orderBy = useSelector(selectSortingOrder);
   const orderField = useSelector(selectorderByField);
@@ -72,9 +74,8 @@ function Dashboard() {
   return (
     <div className="nav-app">
       <Navbar label="Dashboard" />
-      {/* <TestTransaction /> */}
-      {/* <TestTable /> */}
       <div className="app-wrapper">
+        {/* <TestTable /> */}
         <div className="summary">
           <p className="font-semibold text-xl">Summary</p>
           <div className="dashboard-view my-4">

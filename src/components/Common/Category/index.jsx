@@ -30,6 +30,7 @@ export const CATEGORY_ICON_CONFIG = {
   "Real estate": Invest,
   Other: Other,
   Rental: Other,
+  Utility: Other,
 };
 function Category({ data: { category: label } }) {
   const IconComponent = CATEGORY_ICON_CONFIG[label];
