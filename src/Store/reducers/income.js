@@ -6,6 +6,10 @@ import {
   getAllIncomesPaginatedApi,
 } from "../../api/incomeService";
 import to from "await-to-js";
+import {
+  getPaginatedTransactionsByType,
+  getTransactionsByTypeApi,
+} from "../../api/transactionService";
 
 const appInitState = {
   incomes: {
@@ -42,9 +46,9 @@ const incomeSlice = createSlice({
 export const getAllIncomesThunk = createAsyncThunk(
   "api/incomes",
   async (params, { dispatch }) => {
-    const [error, response] = await to(getAllIncomesApi());
+    const [error, response] = await to(getTransactionsByTypeApi("income"));
+    console.log(response.data);
     dispatch(setIncomes(response.data));
-    // console.log("the response is ", response.data);
   }
 );
 
@@ -53,13 +57,13 @@ export const getPaginatedIncomeThunk = createAsyncThunk(
   async (params, { dispatch }) => {
     // console.log(" the params are ", params?.offset, params?.pageSize);
     const [error, response] = await to(
-      getAllIncomesPaginatedApi(params?.offset, params?.pageSize)
+      getPaginatedTransactionsByType("income", params?.offset, params?.pageSize)
     );
     dispatch(setTotalNumberOfElements(response.data.totalElements));
     if (response?.data?.number === 0) {
-      dispatch(setIncomes(response.data.content));
+      dispatch(setIncomes(response.data));
     } else {
-      dispatch(addIncomes(response.data.content));
+      dispatch(addIncomes(response.data));
     }
   }
 );
@@ -88,7 +92,7 @@ export const getAllIncomesSortedThunk = createAsyncThunk(
   "api/incomes/sorted",
   async (params, { dispatch }) => {
     const [error, response] = await to(
-      getAllIncomeAsSortedApi(params?.sortByField, params?.orderBy)
+      getPaginatedTransactionsByType(params?.orderBy)
     );
     dispatch(setIncomes(response.data.content));
     // dispatch(setTotalNumberOfElements(response.data.totalElements));

@@ -1,27 +1,32 @@
 import axios from "axios";
+import { BASE_URL } from "./authService";
 
-const BASE_TRANSACTION_REST_URL =
-  "https://expensia-be.onrender.com/expensia/transactions";
+let URL = BASE_URL + "/transactions";
 
 export const getTransactionApi = (id, type) => {
-  return axios.get(BASE_TRANSACTION_REST_URL + "/" + id + "?type=" + type);
+  return axios.get(`${URL}/?type=${type}&id=${id}`);
+};
+
+export const getTransactionsByTypeApi = (type) => {
+  return axios.get(`${URL}/?type=${type}`);
+};
+
+export const getPaginatedTransactionsByType = (type, page, limit) => {
+  return axios.get(`${URL}/?type=${type}&page=${page}&limit=${limit}`);
 };
 
 export const getAllTransactionApi = () => {
-  return axios.get(BASE_TRANSACTION_REST_URL);
+  return axios.get(URL);
 };
 
 export const addTransactionApi = (transactionObj) => {
-  console.log("axios api", transactionObj);
-  return axios.post(BASE_TRANSACTION_REST_URL, transactionObj);
+  return axios.post(URL, transactionObj);
 };
 
 export const updateTransactionApi = (transactionObj) => {
-  return axios.put(BASE_TRANSACTION_REST_URL, transactionObj);
+  return axios.put(`${URL}/${id}`, transactionObj);
 };
 
-export const deleteTransactionApi = (id, type) => {
-  console.log("id is " + id);
-  console.log("type is " + type);
-  return axios.delete(BASE_TRANSACTION_REST_URL + "/" + id + "?type=" + type);
+export const deleteTransactionApi = (id) => {
+  return axios.delete(`${URL}/${id}`);
 };

@@ -44,7 +44,7 @@ const transactionSlice = createSlice({
     },
     updateTransaction(state, action) {
       state.transactions.list = state.transactions.list.map((item) => {
-        if (item.id == action.payload.id) {
+        if (item.id === action.payload.id) {
           return action.payload;
         } else {
           return item;
@@ -53,53 +53,72 @@ const transactionSlice = createSlice({
       recalculateSummary(state);
     },
     deleteTransaction(state, action) {
-      state.transactions.list = state.transactions.list.map((item) => {
-        if (item.id != action.payload) {
-          return item;
-        }
-      });
+      state.transactions.list = state.transactions.list.filter(
+        (item) => item.id !== action.payload
+      );
       recalculateSummary(state);
     },
   },
 });
 
 export const getTransactionThunk = createAsyncThunk(
-  "api/transactions",
+  "transaction/getTransaction",
   async (params, { dispatch }) => {
-    const [error, response] = await to(getTransactionApi(params));
-    dispatch(addSingleTransaction(response.data));
+    const [error, response] = await to(
+      getTransactionApi(params.id, params.type)
+    );
+    if (!error) {
+      dispatch(addSingleTransaction(response.data));
+    }
+    return response;
   }
 );
 
 export const getAllTransactionsThunk = createAsyncThunk(
-  "api/getAlTtransactions",
-  async (params, { dispatch }) => {
+  "transaction/getAllTransactions",
+  async (_, { dispatch }) => {
     const [error, response] = await to(getAllTransactionApi());
-    // if (params?.haveTransaction) dispatch(setTransactions(response.data));
-    // else dispatch(setTransactions(response.data));
-    dispatch(setTransactions(response.data));
+    if (!error) {
+      dispatch(setTransactions(response.data));
+    }
+    return response;
   }
 );
 
 export const createTransactionThunk = createAsyncThunk(
-  "api/addtransactions",
+  "transaction/createTransaction",
   async (params, { dispatch }) => {
-    console.log("printing params ", params);
     const { onSuccess = () => {}, ...rest } = params;
     const [error, response] = await to(addTransactionApi(rest));
-    if (response?.data) {
+    if (!error && response.data) {
       dispatch(addSingleTransaction(response.data));
-      onSuccess(response?.data);
+      onSuccess(response.data);
     }
+    return response;
   }
 );
 
 export const updateTransactionThunk = createAsyncThunk(
-  "api/transactions",
+  "transaction/updateTransaction",
   async (params, { dispatch }) => {
-    // console.log("printing params ", params);
-    const [error, response] = await to(updateTransactionApi(params));
-    dispatch(updateTransaction(response.data));
+    const [error, response] = await to(
+      updateTransactionApi(params.id, params.transactionObj)
+    );
+    if (!error) {
+      dispatch(updateTransaction(response.data));
+    }
+    return response;
+  }
+);
+
+export const deleteTransactionThunk = createAsyncThunk(
+  "transaction/deleteTransaction",
+  async (params, { dispatch }) => {
+    const [error, response] = await to(deleteTransactionApi(params.id));
+    if (!error) {
+      dispatch(deleteTransaction(params.id));
+    }
+    return response;
   }
 );
 
@@ -119,16 +138,6 @@ const calculateTotal = (state, type) => {
     .reduce((total, item) => total + item.amount, 0);
 };
 
-export const deleteTransactionThunk = createAsyncThunk(
-  "api/transactions",
-  async (params, { dispatch }) => {
-    const [error, response] = await to(
-      deleteTransactionApi(params?.id, params?.type)
-    );
-    dispatch(deleteTransaction());
-  }
-);
-
 export const {
   setTransactions,
   addTransactions,
@@ -136,4 +145,13 @@ export const {
   updateTransaction,
   deleteTransaction,
 } = transactionSlice.actions;
+
+export const transactionThunks = {
+  getTransactionThunk,
+  getAllTransactionsThunk,
+  createTransactionThunk,
+  updateTransactionThunk,
+  deleteTransactionThunk,
+};
+
 export default transactionSlice.reducer;

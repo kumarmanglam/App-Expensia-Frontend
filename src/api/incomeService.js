@@ -1,40 +1,35 @@
 import axios from "axios";
-
-const INCOME_BASE_URL = "https://expensia-be.onrender.com/expensia/incomes";
+import { BASE_URL } from "./authService";
 
 export const getIncomeApi = (id) => {
-  return axios.get(INCOME_BASE_URL + "/" + id);
+  return axios.get(BASE_URL + "/" + id);
 };
 
 export const getAllIncomesApi = () => {
-  return axios.get(INCOME_BASE_URL);
+  return axios.get(BASE_URL);
 };
 
 export const addIncomeApi = (incomeObj) => {
-  return axios.post(INCOME_BASE_URL, incomeObj);
+  return axios.post(BASE_URL, incomeObj);
 };
 
 export const updateIncomeApi = (incomeObj) => {
-  return axios.put(INCOME_BASE_URL + "/" + incomeObj?.id, incomeObj);
+  return axios.put(BASE_URL + "/" + incomeObj?.id, incomeObj);
 };
 
 export const deleteIncomeApi = (id) => {
-  return axios.delete(INCOME_BASE_URL + "/" + id);
+  return axios.delete(BASE_URL + "/" + id);
 };
 
 export const getAllIncomeAsSortedApi = (sortByField, orderBy) => {
   return axios.get(
-    INCOME_BASE_URL +
-      "/sorted?sortByField=" +
-      sortByField +
-      "&orderBy=" +
-      orderBy
+    BASE_URL + "/sorted?sortByField=" + sortByField + "&orderBy=" + orderBy
   );
 };
 
 export const getAllIncomesPaginatedApi = (offset, pageSize) => {
   return axios.get(
-    INCOME_BASE_URL + "/paginate?offset=" + offset + "&pageSize=" + pageSize
+    BASE_URL + "/paginate?offset=" + offset + "&pageSize=" + pageSize
   );
 };
 
@@ -57,7 +52,7 @@ export const getAllIncomesPaginatedAndSortedApi = (
   //     orderBy
   // );
   return axios.get(
-    INCOME_BASE_URL +
+    BASE_URL +
       "/paginateAndSort?offset=" +
       offset +
       "&pageSize=" +

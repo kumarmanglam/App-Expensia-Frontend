@@ -26,6 +26,7 @@ export const top10TransactionsSelector = (state) => {
   // Return the top 10 transactions
   return sortedTransactions.slice(0, 10);
 };
+
 export const top20TransactionsSelector = (state) => {
   // Sort transactions by amount in descending order
   const sortedTransactions = state.transaction.transactions.list

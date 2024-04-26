@@ -11,6 +11,7 @@ import { ReactComponent as Wallet } from "../../assets/icons/wallet.svg";
 
 import {
   selectSummary,
+  selectTransactionList,
   top20TransactionsSelector,
 } from "../../Store/selectors/transaction";
 import Table from "../../components/Table";
@@ -25,6 +26,7 @@ import { TABLE_HEADER_CONFIG } from "../../components/Table/headerConfig";
 import AddBtn from "../../components/core/AddBtn";
 import ProfileImage from "../Profile/ProfileImage";
 import TestTable from "./testTable";
+import { getAllTransactionsThunk } from "../../Store/reducers/transaction";
 
 function Dashboard() {
   const ref = useRef(null);
@@ -32,11 +34,11 @@ function Dashboard() {
   const orderBy = useSelector(selectSortingOrder);
   const orderField = useSelector(selectorderByField);
 
-  const top10Transactions = useSelector(top20TransactionsSelector);
+  const transactionList = useSelector(selectTransactionList);
 
-  // useEffect(() => {
-  //   dispatch(getAllTransactionsThunk());
-  // }, []);
+  useEffect(() => {
+    dispatch(getAllTransactionsThunk());
+  }, []);
 
   function sortByField(list, field, order) {
     // Use slice() to create a new array and avoid mutating the original array
@@ -56,16 +58,16 @@ function Dashboard() {
     return sortedList;
   }
   // Create a state variable to hold the sorted list
-  const [sortedList, setSortedList] = useState(top10Transactions);
+  const [sortedList, setSortedList] = useState(transactionList);
 
   // Update the sortedList when orderField or orderBy changes
   useEffect(() => {
-    const sortedList = sortByField(top10Transactions, orderField, orderBy);
+    const sortedList = sortByField(transactionList, orderField, orderBy);
     setSortedList(sortedList);
-  }, [orderField, orderBy, top10Transactions]);
+  }, [orderField, orderBy, transactionList]);
 
   useEffect(() => {
-    const sortedList = sortByField(top10Transactions, orderField, orderBy);
+    const sortedList = sortByField(transactionList, orderField, orderBy);
     setSortedList(sortedList);
   }, []);
 
@@ -116,7 +118,7 @@ function Dashboard() {
         <p className="my-4 px-10 text-xl font-bold table-title-header">
           Top 20 transactions
         </p>
-        <Table list={sortedList} headers={TABLE_HEADER_CONFIG} />
+        <Table list={transactionList} headers={TABLE_HEADER_CONFIG} />
       </div>
     </div>
   );

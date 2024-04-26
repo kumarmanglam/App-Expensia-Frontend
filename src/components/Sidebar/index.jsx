@@ -57,14 +57,14 @@ function Sidebar() {
   }
 
   useEffect(() => {
-    ref.current.continuousStart();
+    // ref.current.continuousStart();
     fetchData();
   }, []);
 
   async function fetchData() {
-    await dispatch(getAllTransactionsThunk());
-    await dispatch(fetchUser());
-    ref.current.complete();
+    // await dispatch(getAllTransactionsThunk());
+    // await dispatch(fetchUser());
+    // ref.current.complete();
   }
 
   // call user and save it in redux or session storage

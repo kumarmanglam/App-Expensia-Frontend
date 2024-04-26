@@ -43,6 +43,7 @@ function RecordAction({
             //call delete thunk and pass transaction object to that
             console.log("delete button clicked");
             dispatch(deleteTransactionThunk(transaction));
+            // dispatch()
           }}
         />
       </div>

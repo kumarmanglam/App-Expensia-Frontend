@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginAPICall } from "../../api/authService";
+import { BASE_URL, loginAPICall } from "../../api/authService";
 import Expensia from "../../assets/images/expensia.png";
 import { BeatLoader } from "react-spinners";
 import TooltipEx from "../../components/core/Tooltip";
@@ -15,23 +15,24 @@ function SignIn() {
   };
   const [isTestUserSignIn, setIsTestUserSignIn] = useState(false);
   const [userData, setUserData] = useState({
-    usernameOrEmail: "",
+    email: "",
     password: "",
   });
   const navigator = useNavigate();
 
   function handleTestSignIn() {
     setUserData({
-      usernameOrEmail: "testUser",
-      password: "test",
+      email: "TesterExpensia777@gmail.com",
+      password: "TestExpensia777",
     });
     setIsTestUserSignIn(true);
   }
 
   async function handleSubmit(e, withForm = false) {
+    e.preventDefault();
     if (withForm) e.preventDefault();
 
-    if (userData.usernameOrEmail.length === 0) {
+    if (userData.email.length === 0) {
       alert("Enter correct Username Or Email");
       setLoading(false);
     } else if (userData.password.length === 0) {
@@ -42,7 +43,7 @@ function SignIn() {
       //trim the userdata extra space after the username or email
       setUserData({
         ...userData,
-        usernameOrEmail: userData.usernameOrEmail.trim(),
+        email: userData.email.trim(),
       });
       try {
         setLoading(true);
@@ -51,9 +52,11 @@ function SignIn() {
         navigator("/dashboard");
       } catch (error) {
         alert("Enter Valid Credentials");
+        setLoading(false);
+
       }
       setUserData({
-        usernameOrEmail: "",
+        email: "",
         password: "",
       });
     }
@@ -75,15 +78,15 @@ function SignIn() {
             Username or Email
           </label>
           <input
-            value={userData.usernameOrEmail}
+            value={userData.email}
             onChange={(e) =>
-              setUserData({ ...userData, usernameOrEmail: e.target.value })
+              setUserData({ ...userData, email: e.target.value })
             }
             type="text"
             placeholder="Enter Username or Email"
             required
             className="inputSign"
-            id="usernameOrEmail"
+            id="email"
           />
         </div>
         <div className="inputWrap">

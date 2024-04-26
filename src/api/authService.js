@@ -1,25 +1,15 @@
 import axios from "axios";
 
-// const getAuthBaseUrl = async () => {
-//   const authBaseUrl = import.meta.env.AUTH_REST_API_BASE_URL;
-//   return authBaseUrl;
-// };
-// const getAuthResetBaseUrl = async () => {
-//   const resetBaseUrl = import.meta.env.AUTH_RESET_PASSWORD_BASE_URL;
-//   return resetBaseUrl;
-// };
-
-const AUTH_REST_API_BASE_URL = "https://expensia-be.onrender.com/expensia/auth";
-const AUTH_RESET_PASSWORD_BASE_URL =
-  "https://expensia-be.onrender.com/expensia/password-reset";
-const AUTH_USER_BASE_URL = "https://expensia-be.onrender.com/expensia/user";
+export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Api Call Functions
 export const loginAPICall = (loginObj) => {
+  console.log(loginObj);
   return axios
-    .post(AUTH_REST_API_BASE_URL + "/login", loginObj)
+    .post(BASE_URL + "/auth/login", loginObj)
     .then((response) => {
-      const token = "Bearer " + response.data.accessToken;
+      const token = "Bearer " + response.data.token;
+
       const role = response.data.role;
       sessionStorage.setItem("role", role);
       storeToken(token);
@@ -31,10 +21,7 @@ export const loginAPICall = (loginObj) => {
 };
 
 export const registerAPICall = (registerObj) => {
-  return axios.post(
-    "https://expensia-be.onrender.com/expensia/auth" + "/register",
-    registerObj
-  );
+  return axios.post(BASE_URL + "/auth/register", registerObj);
 };
 
 export const sendResetLink = (email) => {
@@ -127,13 +114,19 @@ export const isTokenExpired = () => {
   if (!token) {
     return true; // Token not found or null
   }
-  const decodedToken = JSON.parse(atob(token?.split(".")[1])); // Decode the token
-  const expiryTime = decodedToken.exp * 1000; // Expiry time in milliseconds
+  const tokenParts = token.split(".");
+  if (tokenParts.length !== 3) {
+    return true; // Invalid token format
+  }
+  const payload = tokenParts[1];
+  const decodedPayload = atob(payload);
+  const parsedPayload = JSON.parse(decodedPayload);
+  if (!parsedPayload || !parsedPayload.exp) {
+    return true; // Invalid payload or no expiry time
+  }
+  const expiryTime = parsedPayload.exp * 1000; // Expiry time in milliseconds
   return Date.now() > expiryTime;
-  // the format of Date.now() is->
-  // the format of expiryTime is->
 };
-
 export const logout = () => {
   sessionStorage.clear();
 };
