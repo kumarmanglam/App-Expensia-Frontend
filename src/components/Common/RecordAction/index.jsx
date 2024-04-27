@@ -9,6 +9,9 @@ import { ReactComponent as Edit } from "../../../assets/icons/edit.svg";
 import { ReactComponent as Delete } from "../../../assets/icons/trash.svg";
 import { selectModalData } from "../../../Store/selectors/modal";
 import { deleteTransactionThunk, getAllTransactionsThunk } from "../../../Store/reducers/transaction";
+import { getAllIncomesThunk } from "../../../Store/reducers/income";
+import { getAllExpensesThunk } from "../../../Store/reducers/expense";
+import { getAllInvestmentsThunk } from "../../../Store/reducers/investment";
 
 function RecordAction({
   data: transaction,
@@ -23,9 +26,6 @@ function RecordAction({
         // style={{ width: "4px" }}
         onClick={() => {
           dispatch(setIsModalOpen());
-          console.log(
-            "edit clicked the received transaction id is " + transaction?.id
-          );
           dispatch(setModalData(transaction));
           dispatch(setModalIsEditing(true));
         }}
@@ -35,10 +35,16 @@ function RecordAction({
       <div className="cursor-pointer">
         <Delete
           className="w-4 h-4"
-          onClick={() => {
-            console.log("delete button clicked");
-            dispatch(deleteTransactionThunk(transaction));
+          onClick={async () => {
+            await dispatch(deleteTransactionThunk(transaction));
             dispatch(getAllTransactionsThunk());
+            if(transaction.type == "income"){
+              dispatch(getAllIncomesThunk());
+            }else if(transaction.type == "expense"){
+              dispatch(getAllExpensesThunk());
+            }else{
+              dispatch(getAllInvestmentsThunk());
+            }
           }}
         />
       </div>

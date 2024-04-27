@@ -59,7 +59,6 @@ export const getPaginatedIncomeThunk = createAsyncThunk(
       getPaginatedTransactionsByType("income", params?.offset, params?.pageSize)
     );
     dispatch(setTotalNumberOfElements(response.data.totalItems));
-    console.log(response.data.totalItems);
     if (response?.data?.number === 0) {
       dispatch(setIncomes(response.data.transactions));
     } else {

@@ -19,6 +19,8 @@ import {
   createTransactionThunk,
   updateTransactionThunk,
 } from "../../Store/reducers/transaction";
+import { getAllIncomesThunk } from "../../Store/reducers/income";
+import { getAllInvestmentsThunk } from "../../Store/reducers/investment";
 function Modal() {
   const dispatch = useDispatch();
   const { pathname } = useLocation();
@@ -32,7 +34,6 @@ function Modal() {
     type: type,
     category: CATEGORY_CONFIG_MODAL[type]?.defaultData?.category,
   });
-  console.log(formData);
   const editData = useSelector(selectModalData);
 
   // useEffect(() => {
@@ -49,12 +50,10 @@ function Modal() {
 
   useEffect(() => {
     if (isEditing) {
-      console.log("mai reset kr sakta hu is Editing");
-
       setFormData({
         id: editData.id,
         amount: editData.amount,
-        date: editData.date,
+        date: editData.dateTime,
         description: editData.description,
         type: editData.type,
         category: editData.category,
@@ -89,15 +88,16 @@ function Modal() {
   //   };
   // }, []);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (formData.amount <= 0) {
       alert("Amount should be greater than 0");
     } else if (formData.description.trim() == "") {
       alert("Description cannot be empty");
     } else if (isEditing) {
-      dispatch(updateTransactionThunk(formData));
+      await dispatch(updateTransactionThunk({transactionObj: formData}));
       dispatch(closeIsModalOpen());
+      updateTableData(formData);
     } else {
       dispatch(
         createTransactionThunk({ ...formData, onSuccess: (transaction) => {} })
@@ -105,6 +105,16 @@ function Modal() {
       dispatch(closeIsModalOpen());
     }
   }
+
+  const updateTableData = (formData) => {
+    if (formData.type == "expense") {
+      dispatch(getAllExpensesThunk());
+    } else if (formData.type == "investment") {
+      dispatch(getAllInvestmentsThunk());
+    } else if (formData.type == "income") {
+      dispatch(getAllIncomesThunk());
+    }
+  };
 
   return (
     <div>
@@ -143,7 +153,7 @@ function Modal() {
               <input
                 type="date"
                 className="w-full p-2 bg-suface-color text-white  rounded"
-                value={formData.date}
+                value={formData.dateTime}
                 onChange={(e) =>
                   setFormData({ ...formData, date: e.target.value })
                 }

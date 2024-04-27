@@ -101,8 +101,9 @@ export const createTransactionThunk = createAsyncThunk(
 export const updateTransactionThunk = createAsyncThunk(
   "transaction/updateTransaction",
   async (params, { dispatch }) => {
+    213;
     const [error, response] = await to(
-      updateTransactionApi(params.id, params.transactionObj)
+      updateTransactionApi(params.transactionObj)
     );
     if (!error) {
       dispatch(updateTransaction(response.data));

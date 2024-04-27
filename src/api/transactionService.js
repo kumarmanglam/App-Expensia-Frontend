@@ -24,7 +24,7 @@ export const addTransactionApi = (transactionObj) => {
 };
 
 export const updateTransactionApi = (transactionObj) => {
-  return axios.put(`${URL}/${id}`, transactionObj);
+  return axios.put(`${URL}/${transactionObj.id}`, transactionObj);
 };
 
 export const deleteTransactionApi = (id) => {
