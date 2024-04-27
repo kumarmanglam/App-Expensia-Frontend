@@ -8,6 +8,7 @@ import AddBtn from "../../components/core/AddBtn";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllExpensesPaginatedAndSortedThunk,
+  getAllExpensesThunk,
   getPaginatedExpenseThunk,
 } from "../../Store/reducers/expense";
 import {
@@ -60,6 +61,7 @@ function Expenses() {
   // }, []);
 
   const loadMoreData = () => {
+    dispatch(getAllExpensesThunk());
     if (pageNum * 20 <= totalNoOfRecords) {
       if (sortField == "default" || orderBy === 0) {
         console.log("default is called");

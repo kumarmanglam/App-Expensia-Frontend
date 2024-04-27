@@ -38,7 +38,7 @@ function Income() {
   const dispatch = useDispatch();
   const summary = useSelector(selectSummary);
   const incomeList = useSelector(selectIncomeList);
-  const [pageNum, setPageNum] = useState(0);
+  const [pageNum, setPageNum] = useState(1);
   const sortField = useSelector(selectorderByField);
   const orderBy = useSelector(selectSortingOrder);
   const [searchQuery, setSearchQuery] = useState("");
@@ -52,11 +52,11 @@ function Income() {
   });
 
   useEffect(() => {
-    // ref.current.continuousStart();
+    ref.current.continuousStart();
   }, []);
 
   useEffect(() => {
-    setPageNum(0);
+    setPageNum(1);
   }, [orderBy, sortField]);
 
   useEffect(() => {
@@ -64,27 +64,31 @@ function Income() {
   }, [pageNum, sortField, orderBy]);
 
   const loadMoreData = () => {
-    console.log("load more data")
-    dispatch(getAllIncomesThunk());
-    // if (pageNum * 20 <= totalNoOfRecords) {
+    // dispatch(getAllIncomesThunk());
+    dispatch(getPaginatedIncomeThunk({ offset: pageNum, pageSize: 5 }));
+    // if (pageNum * 5 <= totalNoOfRecords) {
     //   if (sortField == "default" || orderBy === 0) {
-    //     dispatch(getPaginatedIncomeThunk({ offset: pageNum, pageSize: 20 }));
+    //     dispatch(getPaginatedIncomeThunk({ offset: pageNum, pageSize: 5 }));
+    //     console.log("default condtion -->" + pageNum);
     //   } else {
+        
+    //     console.log("second condtion -->" + pageNum)
     //     dispatch(
     //       getAllIncomesPaginatedAndSortedThunk({
     //         offset: pageNum,
-    //         pageSize: 20,
+    //         pageSize: 5,
     //         sortByField: sortField,
     //         orderBy: SORT_ORDER_BY_CONFIG[orderBy],
     //       })
     //     );
     //   }
     // }
-    // ref.current.complete();
+    ref.current.complete();
   };
   const filteredData = incomeList.filter((expense) =>
     expense.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  // const filteredData = incomeList;
   return (
     <div className="nav-app">
       <LoadingBar ref={ref} color="#bb86fc" transitionTime={1000} />

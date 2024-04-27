@@ -47,8 +47,7 @@ export const getAllIncomesThunk = createAsyncThunk(
   "api/incomes",
   async (params, { dispatch }) => {
     const [error, response] = await to(getTransactionsByTypeApi("income"));
-    console.log(response.data);
-    dispatch(setIncomes(response.data));
+    dispatch(setIncomes(response.data.transactions));
   }
 );
 
@@ -59,11 +58,12 @@ export const getPaginatedIncomeThunk = createAsyncThunk(
     const [error, response] = await to(
       getPaginatedTransactionsByType("income", params?.offset, params?.pageSize)
     );
-    dispatch(setTotalNumberOfElements(response.data.totalElements));
+    dispatch(setTotalNumberOfElements(response.data.totalItems));
+    console.log(response.data.totalItems);
     if (response?.data?.number === 0) {
-      dispatch(setIncomes(response.data));
+      dispatch(setIncomes(response.data.transactions));
     } else {
-      dispatch(addIncomes(response.data));
+      dispatch(addIncomes(response.data.transactions));
     }
   }
 );

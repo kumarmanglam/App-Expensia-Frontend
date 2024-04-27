@@ -8,12 +8,9 @@ import {
 import { ReactComponent as Edit } from "../../../assets/icons/edit.svg";
 import { ReactComponent as Delete } from "../../../assets/icons/trash.svg";
 import { selectModalData } from "../../../Store/selectors/modal";
-import { deleteTransactionThunk } from "../../../Store/reducers/transaction";
+import { deleteTransactionThunk, getAllTransactionsThunk } from "../../../Store/reducers/transaction";
 
 function RecordAction({
-  handleEditAction,
-  handleDeleteAction,
-  recordObject,
   data: transaction,
 }) {
   //send transaction to modal data state
@@ -39,11 +36,9 @@ function RecordAction({
         <Delete
           className="w-4 h-4"
           onClick={() => {
-            // handleDeleteAction(recordObject);
-            //call delete thunk and pass transaction object to that
             console.log("delete button clicked");
             dispatch(deleteTransactionThunk(transaction));
-            // dispatch()
+            dispatch(getAllTransactionsThunk());
           }}
         />
       </div>

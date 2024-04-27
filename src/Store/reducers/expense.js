@@ -5,6 +5,7 @@ import {
   getAllExpensesApi,
 } from "../../api/expenseService";
 import to from "await-to-js";
+import { getTransactionsByTypeApi } from "../../api/transactionService";
 
 const initState = {
   expenses: {
@@ -36,9 +37,8 @@ const expenseSlice = createSlice({
 export const getAllExpensesThunk = createAsyncThunk(
   "api/expenses/getAllExpensesThunk",
   async (params, { dispatch }) => {
-    const [error, response] = await to(getAllExpensesApi());
-    dispatch(setExpenses(response.data));
-    console.log("the response from expense thunk is ");
+    const [error, response] = await to(getTransactionsByTypeApi("expense"));
+    dispatch(setExpenses(response.data.transactions));
   }
 );
 

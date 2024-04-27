@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllInvestmentPaginatedAndSortedThunk,
+  getAllInvestmentsThunk,
   getPaginatedInvestmentThunk,
 } from "../../Store/reducers/investment";
 import {
@@ -28,7 +29,7 @@ function Investments() {
   const dispatch = useDispatch();
   const summary = useSelector(selectSummary);
   const investmentlist = useSelector(selectInvestmentList);
-  const [pageNum, setPageNum] = useState(0);
+  const [pageNum, setPageNum] = useState(1);
   const totalNoOfRecords = useSelector(selectInvestmentTotalNoOfElements);
   const sortField = useSelector(selectorderByField);
   const orderBy = useSelector(selectSortingOrder);
@@ -43,7 +44,7 @@ function Investments() {
   }, []);
 
   useEffect(() => {
-    setPageNum(0);
+    setPageNum(1);
   }, [orderBy, sortField]);
 
   useEffect(() => {
@@ -55,23 +56,24 @@ function Investments() {
   // }, []);
 
   const loadMoreData = () => {
-    if (pageNum * 20 <= totalNoOfRecords) {
-      if (sortField == "default" || orderBy === 0) {
-        console.log("default is called");
-        dispatch(
-          getPaginatedInvestmentThunk({ offset: pageNum, pageSize: 20 })
-        );
-      } else {
-        dispatch(
-          getAllInvestmentPaginatedAndSortedThunk({
-            offset: pageNum,
-            pageSize: 20,
-            sortByField: sortField,
-            orderBy: SORT_ORDER_BY_CONFIG[orderBy],
-          })
-        );
-      }
-    }
+    dispatch(getPaginatedInvestmentThunk({ offset: pageNum, pageSize: 20 }));
+    // if (pageNum * 20 <= totalNoOfRecords) {
+    //   if (sortField == "default" || orderBy === 0) {
+    //     console.log("default is called");
+    //     dispatch(
+    //       getPaginatedInvestmentThunk({ offset: pageNum, pageSize: 20 })
+    //     );
+    //   } else {
+    //     dispatch(
+    //       getAllInvestmentPaginatedAndSortedThunk({
+    //         offset: pageNum,
+    //         pageSize: 20,
+    //         sortByField: sortField,
+    //         orderBy: SORT_ORDER_BY_CONFIG[orderBy],
+    //       })
+    //     );
+    //   }
+    // }
     ref.current.complete();
   };
   const filteredData = investmentlist.filter((expense) =>

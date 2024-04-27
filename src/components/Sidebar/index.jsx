@@ -62,7 +62,7 @@ function Sidebar() {
   }, []);
 
   async function fetchData() {
-    // await dispatch(getAllTransactionsThunk());
+    await dispatch(getAllTransactionsThunk());
     // await dispatch(fetchUser());
     // ref.current.complete();
   }

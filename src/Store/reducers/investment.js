@@ -5,6 +5,10 @@ import {
   getAllInvestmentPaginatedAndSortedApi,
   getAllInvestmentPaginatedApi,
 } from "../../api/investmentService";
+import {
+  getPaginatedTransactionsByType,
+  getTransactionsByTypeApi,
+} from "../../api/transactionService";
 
 const appInitState = {
   investments: {
@@ -38,10 +42,8 @@ const investmentSlice = createSlice({
 export const getAllInvestmentsThunk = createAsyncThunk(
   "api/investments",
   async (params, { dispatch }) => {
-    // console.log("hello buddy im working");
-    const [error, response] = await to(getAllInvestmentApi());
-    console.log("hello buddy thisis response data ", response.data);
-    dispatch(setInvestments(response.data));
+    const [error, response] = await to(getTransactionsByTypeApi("investment"));
+    dispatch(setInvestments(response.data.transactions));
   }
 );
 
@@ -49,13 +51,17 @@ export const getPaginatedInvestmentThunk = createAsyncThunk(
   "api/investments",
   async (params, { dispatch }) => {
     const [error, response] = await to(
-      getAllInvestmentPaginatedApi(params?.offset, params?.pageSize)
+      getPaginatedTransactionsByType(
+        "investment",
+        params?.offset,
+        params?.pageSize
+      )
     );
     dispatch(setTotalNumberOfElements(response.data.totalElements));
     if (response?.data?.number === 0) {
-      dispatch(setInvestments(response.data.content));
+      dispatch(setInvestments(response.data.transactions));
     } else {
-      dispatch(addInvestments(response.data.content));
+      dispatch(addInvestments(response.data.transactions));
     }
   }
 );
